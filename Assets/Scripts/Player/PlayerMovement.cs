@@ -9,12 +9,12 @@ namespace Player
         private readonly SpriteRenderer _spriteRenderer;
         private readonly PlayerGroundCheck _playerGroundCheck;
         
-        public PlayerMovement(Player player)
+        public PlayerMovement(Player player, PlayerGroundCheck playerGroundCheck)
         {
             _rigidbody2D = player.GetComponent<Rigidbody2D>();
             _spriteRenderer = player.GetComponent<SpriteRenderer>();
-            _playerGroundCheck = player.GetComponent<PlayerGroundCheck>();
             _localAnimator = new LocalAnimator(player.GetComponent<Animator>());
+            _playerGroundCheck = playerGroundCheck;
             
             _rigidbody2D.velocity = Vector2.zero;
         }

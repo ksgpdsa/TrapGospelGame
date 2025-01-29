@@ -6,8 +6,13 @@ namespace Items
     {
         private Animator _animator;
         private Collider2D _collider2D;
-    
-        // Start is called before the first frame update
+        private Player.Player _player;
+
+        private void Awake()
+        {
+            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player.Player>();
+        }
+
         void Start()
         {
             _animator = GetComponent<Animator>();
@@ -21,8 +26,13 @@ namespace Items
                 _animator.enabled = true;
                 Destroy(_animator, 1);
                 Destroy(_collider2D);
-                Destroy(this);
             }
+        }
+
+        public void SetRandomAward()
+        {
+            _player.SetRandomAward();
+            Destroy(this);
         }
     }
 }

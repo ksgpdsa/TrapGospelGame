@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using Player;
 using UnityEngine;
 
 namespace Enemies
@@ -9,6 +7,7 @@ namespace Enemies
     {
         private GameObject _enemy;
         private float _arrowVelocity;
+        private bool hasDamaged = false;
         
         public void Initialize(GameObject enemy, float arrowVelocity)
         {
@@ -52,11 +51,12 @@ namespace Enemies
 
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (col.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if (col.gameObject.layer == LayerMask.NameToLayer("Player") && !hasDamaged)
             {
                 var player = col.gameObject.GetComponent<Player.Player>();
-                Destroy(gameObject);
+                hasDamaged = true;
                 player.TakeDamage(1);
+                Destroy(gameObject);
             }
         }
     }

@@ -2,13 +2,21 @@ namespace Player
 {
     using UnityEngine;
 
-    public class PlayerGroundCheck : MonoBehaviour
+    public class PlayerGroundCheck
     {
-        [SerializeField] private Transform feetPosition;
-        [SerializeField] private Vector2 sizeCapsule;
-        [SerializeField] private LayerMask groundLayer;
-        [SerializeField] private float angleCapsule;
+        private readonly Transform _feetPosition;
+        private readonly Vector2 _sizeCapsule;
+        private readonly LayerMask _groundLayer;
+        private readonly float _angleCapsule;
 
+        public PlayerGroundCheck(Transform feetPosition, Vector2 sizeCapsule, LayerMask groundLayer, float angleCapsule)
+        {
+            _feetPosition = feetPosition;
+            _sizeCapsule = sizeCapsule;
+            _groundLayer = groundLayer;
+            _angleCapsule = angleCapsule;
+        }
+        
         private bool _isGrounded;
 
         public bool GetIsGrounded()
@@ -16,15 +24,15 @@ namespace Player
             return _isGrounded;
         }
 
-        private void Update()
+        public void Update()
         {
-            _isGrounded = Physics2D.OverlapCapsule(feetPosition.position, sizeCapsule, CapsuleDirection2D.Horizontal, angleCapsule, groundLayer);
+            _isGrounded = Physics2D.OverlapCapsule(_feetPosition.position, _sizeCapsule, CapsuleDirection2D.Horizontal, _angleCapsule, _groundLayer);
         }
 
-        private void OnDrawGizmosSelected()
+        public void OnDrawGizmosSelected()
         {
             Gizmos.color = _isGrounded ? Color.green : Color.red;
-            Gizmos.DrawCube(feetPosition.position, sizeCapsule);
+            Gizmos.DrawCube(_feetPosition.position, _sizeCapsule);
         }
     }
 }

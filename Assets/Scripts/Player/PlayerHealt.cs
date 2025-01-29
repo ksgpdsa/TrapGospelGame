@@ -11,7 +11,7 @@ namespace Player
             _lives = lives;
         }
 
-        public void TakeDamage(int damage)
+        public int TakeDamage(int damage)
         {
             _lives -= damage;
             Debug.Log($"Vidas restantes: {_lives}");
@@ -20,12 +20,14 @@ namespace Player
             {
                 GameOver();
             }
+            
+            return _lives;
         }
 
         public void GameOver()
         {
             Debug.Log("Game Over!");
-            // todo: Lógica para finalizar o jogo ou reiniciar
+            _lives = 0;
         }
     }
 }
