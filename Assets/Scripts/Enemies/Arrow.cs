@@ -5,14 +5,17 @@ namespace Enemies
 {
     public class Arrow : MonoBehaviour
     {
-        private GameObject _enemy;
         private float _arrowVelocity;
-        private bool hasDamaged = false;
+        private int _damage;
+        private bool hasDamaged;
+        private bool flipX;
         
-        public void Initialize(GameObject enemy, float arrowVelocity)
+        public void Initialize(bool enemyFlipX, float arrowVelocity, int damage)
         {
-            _enemy = enemy;
             _arrowVelocity = arrowVelocity;
+            _damage = damage;
+            
+            flipX = !enemyFlipX;
         }
         
         private void Start()
@@ -20,8 +23,7 @@ namespace Enemies
             var rigidbodyArrow = GetComponent<Rigidbody2D>();
             var spriteArrow = GetComponent<SpriteRenderer>();
             
-            var spriteEnemy = _enemy.GetComponent<SpriteRenderer>();
-            spriteArrow.flipX = !spriteEnemy.flipX;
+            spriteArrow.flipX = flipX;
             
             var direction = spriteArrow.flipX ? Vector3.right : Vector3.left;
             
@@ -32,7 +34,7 @@ namespace Enemies
             StartCoroutine(RotateArrow(spriteArrow.flipX ? 45f : -45f, 1f));
         }
 
-        IEnumerator RotateArrow(float targetAngle, float duration)
+        private IEnumerator RotateArrow(float targetAngle, float duration)
         {
             var elapsed = 0f;
             var startAngle = transform.rotation.eulerAngles.z; // Obtém o ângulo inicial
@@ -54,8 +56,14 @@ namespace Enemies
             if (col.gameObject.layer == LayerMask.NameToLayer("Player") && !hasDamaged)
             {
                 var player = col.gameObject.GetComponent<Player.Player>();
+                
+                if (!player)
+                {
+                    return;
+                }
+                
                 hasDamaged = true;
-                player.TakeDamage(1);
+                player.TakeDamage(_damage);
                 Destroy(gameObject);
             }
         }

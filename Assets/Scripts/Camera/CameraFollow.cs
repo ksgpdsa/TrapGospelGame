@@ -9,13 +9,13 @@ namespace Camera
         private Transform _target;
         
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             _target = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
         // Update is called once per frame
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             var startPosition = new Vector3(_target.position.x, _target.position.y, transform.position.z);
             var smoothedPosition = Vector3.Lerp(transform.position, startPosition, Time.fixedDeltaTime * smoothSpeed);

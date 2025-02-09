@@ -13,13 +13,13 @@ namespace Items
             _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player.Player>();
         }
 
-        void Start()
+        private void Start()
         {
             _animator = GetComponent<Animator>();
             _collider2D = GetComponent<Collider2D>();
         }
-    
-        void OnTriggerEnter2D(Collider2D col)
+
+        private void OnTriggerEnter2D(Collider2D col)
         {
             if (col.gameObject.layer == LayerMask.NameToLayer("Player"))
             {

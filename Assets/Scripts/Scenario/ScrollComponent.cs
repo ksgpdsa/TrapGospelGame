@@ -11,15 +11,15 @@ namespace Scenario
         
         private float _screenStart;
         private float _lenght;
-        
-        void Start()
+
+        private void Start()
         {
             _lenght = GetComponent<TilemapRenderer>().bounds.size.x;
             _screenStart = cameraPlayer.transform.position.x - _lenght;
         }
     
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             transform.position = new Vector3(transform.position.x - scrollSpeed, transform.position.y);
         

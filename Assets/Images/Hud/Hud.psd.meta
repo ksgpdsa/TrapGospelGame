@@ -6,6 +6,7 @@ TextureImporter:
     21300002: Hud_1
     21300004: Hud_2
     21300006: Hud_3
+    21300008: Hud_4
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -102,7 +103,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 69cdf070a310e54448cac4300861dfa3
+      spriteID: 6f411f714a326be429ecaa98120888f6
       vertices: []
       indices: 
       edges: []
@@ -122,7 +123,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cfcb5ffeab6b02444bb46aabaa70be2d
+      spriteID: 5c69da88c6b9e2a449a7fd935740707d
       vertices: []
       indices: 
       edges: []
@@ -142,7 +143,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e125527b6cdcad94ea75d1cf6cac3816
+      spriteID: 62006fa4350d6d145b74bc9f1808c7ad
       vertices: []
       indices: 
       edges: []
@@ -162,7 +163,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 08331b73dee375a4895292df0483438e
+      spriteID: 754a3a127d8835247ba0204a27fb97ad
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hud_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f89d68b023c24e47aab0a51bb834feb
       vertices: []
       indices: 
       edges: []

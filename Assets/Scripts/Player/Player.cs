@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UI;
 using UnityEngine;
+using UnityEngine.Experimental.UIElements;
 
 namespace Player
 {
@@ -18,6 +21,10 @@ namespace Player
         [SerializeField] private float jumpForce;
         [SerializeField] private float moveForce;
         [SerializeField] private int lives;
+        [SerializeField] private int scoreOnDamage;
+        [SerializeField] private float howTimeToNextAttack;
+        [SerializeField] private float howTimeToNextJump;
+        
         protected Dictionary<int, string> Awards;
         
         private bool _jump;
@@ -28,33 +35,42 @@ namespace Player
         private float _verticalUI;
         private bool _attack;
         private bool _attackUI;
+        private float _timerToNextAttack;
+        private float _timerToNextJump;
+        private SpriteRenderer _spriteRenderer;
+        private BoxCollider2D _boxCollider;
+
+        public abstract void AttackFromPlayer();
 
         protected void Awake()
         {
             lives = lives <= 5 ? lives : lives <= 0 ? 1 : 5; // para garantir que não vai ter mais que 5 e nem nascer morto
             _playerGroundCheck = new PlayerGroundCheck(feetPosition, sizeCapsule, groundLayer, angleCapsule);
             _playerMovement = new PlayerMovement(this, _playerGroundCheck);
-            _playerHealth = new PlayerHealth(lives);
+            _playerHealth = new PlayerHealth(lives, scoreOnDamage);
             _localAnimator = new LocalAnimator(GetComponent<Animator>());
         }
 
-        void Start()
+        protected void Start()
         {
-            _hudControl = HudControl.HUDControl;
+            _hudControl = HudControl.StaticHudControl;
             _hudControl.SetPlayerLivesInHud(lives);
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _boxCollider = GetComponent<BoxCollider2D>();
         }
 
-        void Update()
+        private void Update()
         {
             _jump = _jumpUI ? _jumpUI : Input.GetButton("Jump");
             _horizontal = _horizontalUI != 0 ? _horizontalUI : Input.GetAxis("Horizontal");
+            _attack = _attackUI ? _attackUI : Input.GetButton("Fire1");
             _vertical = 0;
             // vertical = Input.GetAxis("Vertical");
 
             _playerGroundCheck.Update();
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             if (_jump)
             {
@@ -75,6 +91,51 @@ namespace Player
                 
                 _localAnimator.SetBoolAnimator(Library.IsMoving, false);
             }
+
+            if (_attack)
+            {
+                _timerToNextAttack = _playerMovement.Attack();
+            }
+
+            if (_timerToNextAttack != 0)
+            {
+                if (_timerToNextAttack > 0)
+                {
+                    _timerToNextAttack -= howTimeToNextAttack * Time.fixedDeltaTime;
+                }
+                else if(_timerToNextAttack < 0 )
+                {
+                    _timerToNextAttack = 0;
+                }
+                
+                _playerMovement.SetTimerToNextAttack(_timerToNextAttack);
+
+                var calculatePercent = 100 - _timerToNextAttack * 100;
+
+                if (calculatePercent > 100)
+                {
+                    calculatePercent = 100;
+                }else if (calculatePercent < 0)
+                {
+                    calculatePercent = 0;
+                }
+                
+                HudControl.StaticHudControl.UpdateImageAttackSize(calculatePercent);
+            }
+
+            if (_timerToNextJump != 0)
+            {
+                if (_timerToNextJump > 0)
+                {
+                    _timerToNextJump -= howTimeToNextJump * Time.fixedDeltaTime;
+                }
+                else if (_timerToNextJump < 0)
+                {
+                    _timerToNextJump = 0;
+                }
+                
+                _playerMovement.SetTimerToNextJump(_timerToNextJump);
+            }
             
             _playerMovement.ManageVelocityActions();
         }
@@ -83,6 +144,28 @@ namespace Player
         {
             var newLives = _playerHealth.TakeDamage(damage);
             _hudControl.SetPlayerLivesInHud(newLives);
+
+            if (newLives > 0)
+            {
+                StartCoroutine(Damage());
+            }
+        }
+
+        private IEnumerator Damage()
+        {
+            _boxCollider.enabled = false;
+            _spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.2f);
+            _spriteRenderer.color = Color.white;
+
+            for (var i = 0; i < 7; i++)
+            {
+                _spriteRenderer.enabled = false;
+                yield return new WaitForSeconds(0.15f);
+                _spriteRenderer.enabled = true;
+                yield return new WaitForSeconds(0.15f);
+            }
+            _boxCollider.enabled = true;
         }
 
         public void GameOver()
