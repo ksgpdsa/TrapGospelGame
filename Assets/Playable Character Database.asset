@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d4c7c339c644e9ab9971f1378a50b97, type: 3}
+  m_Name: Playable Character Database
+  m_EditorClassIdentifier: 
+  characters:
+  - name: Ksbatista
+    gameObject: {fileID: 7713665526441130157, guid: 02bb10ad73679eb4aa2edc9059a05321,
+      type: 3}
+  - name: Renan Batista
+    gameObject: {fileID: 7346711285433647637, guid: a90f08318265f5f49bf7533fdd65a9e8,
+      type: 3}
+  - name: T3rt
+    gameObject: {fileID: 6290291247377889230, guid: 859e7224c3ac2ec49a81157e8279f7a1,
+      type: 3}

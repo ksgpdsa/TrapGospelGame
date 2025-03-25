@@ -1,4 +1,3 @@
-using System.Collections;
 using UI;
 using UnityEngine;
 
@@ -6,11 +5,14 @@ namespace Enemies
 {
     public abstract class Enemy : MonoBehaviour
     {
-        private LocalAnimator _localAnimator;
         private GameObject _player;
-        private SpriteRenderer _spriteRenderer;
         private Collider2D _collider2D;
         private EnemyHealth _enemyHealth;
+        
+        protected Rigidbody2D Rigidbody2D;
+        protected LocalAnimator LocalAnimator;
+        protected SpriteRenderer SpriteRenderer;
+        protected Sprite thisSprite;
         
         private float _attackTime;
         private Vector2 _colliderDefault;
@@ -22,10 +24,10 @@ namespace Enemies
         
         [SerializeField] protected float attackVelocity;
         [SerializeField] protected int takeDamage;
-        [SerializeField] protected GameObject arrow;
-        private Sprite _thisSprite;
+        [SerializeField] protected GameObject attack;
 
         protected abstract int ScoreOnDeath { get; }
+        protected abstract int ScoreOnHit { get; }
         protected abstract void InstantiateAttack();
 
         private void Awake()
@@ -33,13 +35,14 @@ namespace Enemies
             _enemyHealth = new EnemyHealth(enemyLives);
         }
 
-        private void Start()
+        protected void Start()
         {
-            _localAnimator = new LocalAnimator(GetComponent<Animator>());
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-            _collider2D = GetComponent<Collider2D>();
+            LocalAnimator = new LocalAnimator(GetComponent<Animator>());
+            Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+            SpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            _collider2D = gameObject.GetComponent<Collider2D>();
             
-            _thisSprite = _spriteRenderer.sprite;
+            thisSprite = SpriteRenderer.sprite;
 
             _colliderDefault = new Vector2(_collider2D.offset.x, _collider2D.offset.y);
             _colliderFlip = new Vector2(_collider2D.offset.x * -1, _collider2D.offset.y);
@@ -47,7 +50,7 @@ namespace Enemies
             _player = GameObject.FindGameObjectWithTag("Player");
         }
 
-        private void Update()
+        protected void Update()
         {
             ManageAttacks();
             FlipToPlayer();
@@ -87,20 +90,20 @@ namespace Enemies
         {
             if (IsInVision())
             {
-                _spriteRenderer.flipX = _player.transform.position.x < transform.position.x;
-                _collider2D.offset = _spriteRenderer.flipX ? _colliderDefault : _colliderFlip;
+                SpriteRenderer.flipX = _player.transform.position.x < transform.position.x;
+                _collider2D.offset = SpriteRenderer.flipX ? _colliderDefault : _colliderFlip;
             }
         }
 
         private void Attack()
         {
-            _localAnimator.SetBoolAnimator(Library.Attack, true);
+            LocalAnimator.SetBoolAnimator(Library.Attack, true);
         }
 
         private void EndAttack()
         {
             _attackTime = 1;
-            _localAnimator.SetBoolAnimator(Library.Attack, false);
+            LocalAnimator.SetBoolAnimator(Library.Attack, false);
         }
 
         public void TakeDamage(int damage)
@@ -111,9 +114,13 @@ namespace Enemies
             {
                 Defeated();
             }
+            else
+            {
+                HudControl.StaticHudControl.AddScore(ScoreOnHit);
+            }
         }
 
-        private void Defeated()
+        protected virtual void Defeated()
         {
             // StartCoroutine(HudControl.StaticHudControl.DefeatScene(_thisSprite));   
             HudControl.StaticHudControl.AddScore(ScoreOnDeath);

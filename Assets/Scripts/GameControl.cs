@@ -3,8 +3,6 @@ using UnityEngine.SceneManagement;
 
 public abstract class GameControl
 {
-    private const string SavedScore = "SavedScore";
-    
     public static void ReopenLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -14,13 +12,18 @@ public abstract class GameControl
     {
         if (LoadScore(levelName) >= score) return;
         
-        PlayerPrefs.SetInt(SavedScore + "_" + levelName, score);
+        PlayerPrefs.SetInt(Library.PlayerPrefsSavedScore + "_" + levelName, score);
         PlayerPrefs.Save();
     }
     
     public static int LoadScore(string levelName)
     {
-        var scoreName = SavedScore + "_" + levelName;       
-        return PlayerPrefs.HasKey(scoreName) ? PlayerPrefs.GetInt(scoreName) : 0;
+        var scoreName = Library.PlayerPrefsSavedScore + "_" + levelName;       
+        return PlayerPrefs.HasKey(scoreName) ? PlayerPrefs.GetInt(scoreName, 0) : 0;
+    }
+
+    public static void CompleteLevel(int score, string levelName, bool isFinalLevel)
+    {
+        SaveScore(score, levelName + (isFinalLevel ? "" : "Temp"));
     }
 }

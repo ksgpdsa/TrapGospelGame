@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
@@ -72,6 +74,7 @@ namespace UI
             originalColor.a = 0; // Começa invisível
             textScore.color = originalColor;
             originalScale = textScore.transform.localScale;
+            _score = GameControl.LoadScore(levelName + "Temp");
             UpdateScoreText();
         }
 
@@ -116,7 +119,7 @@ namespace UI
                 {
                     var message = awardName + " coletado !";
 
-                    StartCoroutine(ShowMessage(canvasItemGroup, message, sprite, itemText, itemImage, itemPanel));
+                    StartCoroutine(ShowMessage(canvasItemGroup, message, sprite, itemText, itemImage, itemPanel, null));
                     
                     AddScore(itemScore);
                 }
@@ -211,18 +214,18 @@ namespace UI
         
         private IEnumerator WaitAndReopenLevel()
         {
-            yield return StartCoroutine(ShowMessage(canvasGroupGameOver, "Game Over", iconGameOver, textGameOver, imageGameOver, panelGameOver));
+            yield return StartCoroutine(ShowMessage(canvasGroupGameOver, "Game Over", iconGameOver, textGameOver, imageGameOver, panelGameOver, null));
             
             GameControl.SaveScore(_score, levelName);
             GameControl.ReopenLevel();
         }
         
-        // public IEnumerator DefeatScene(Sprite iconDefeatEnemy)
-        // {
-        //     yield return StartCoroutine(ShowMessage(canvasGroupDefeatEnemy, "Eliminado", iconDefeatEnemy, textDefeatEnemy, imageDefeatEnemy, panelDefeatEnemy));
-        // }
+        public IEnumerator DefeatScene(Sprite iconDefeatEnemy, [CanBeNull] string nextSceneName)
+        {
+            yield return StartCoroutine(ShowMessage(canvasGroupDefeatEnemy, "Eliminado", iconDefeatEnemy, textDefeatEnemy, imageDefeatEnemy, panelDefeatEnemy, nextSceneName));
+        }
 
-        private IEnumerator ShowMessage(CanvasGroup canvasGroup, string message, Sprite icon, TextMeshProUGUI text, Image image, GameObject panel)
+        private IEnumerator ShowMessage(CanvasGroup canvasGroup, string message, Sprite icon, TextMeshProUGUI text, Image image, GameObject panel, [CanBeNull] string nextSceneName)
         {
             text.text = message;
             image.sprite = icon;
@@ -239,6 +242,11 @@ namespace UI
             panel.SetActive(false);
             
             Time.timeScale = 1f;
+
+            if (nextSceneName != null)
+            {
+                SceneManager.LoadScene(nextSceneName);
+            }
         }
 
         private static IEnumerator FadeIn(CanvasGroup canvasGroup)

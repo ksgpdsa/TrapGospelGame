@@ -8,13 +8,9 @@ namespace Items
         private Collider2D _collider2D;
         private Player.Player _player;
 
-        private void Awake()
-        {
-            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player.Player>();
-        }
-
         private void Start()
         {
+            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player.Player>();
             _animator = GetComponent<Animator>();
             _collider2D = GetComponent<Collider2D>();
         }

@@ -9,7 +9,20 @@ public static class Library
     
     // Scenes
     public const string IntroScene = "IntroScene";
+    public const string Menu = "Menu";
+    public const string LevelSelect = "LevelSelect";
+    public const string CharacterSelect = "CharacterSelect";
     
-    // Levels
-    public const string Level01 = "Level01";
+    // Player Prefs
+    public const string PlayerPrefsSelectedCharacter = "SelectedCharacter";
+    public const string PlayerPrefsPlayerLives = "PlayerLives";
+    public const string PlayerPrefsSavedScore = "SavedScore";
+    public const string PlayerPrefsComplete = "PlayerPrefsComplete"; // Level Complete
+    public const string PlayerPrefsPurchasedCharacter = "PurchasedCharacter";
+    
+    // Character Names
+    public const string Ksbatista = "Ksbatista";
+    public const string RenanBatista = "RenanBatista";
+    public const string T3rt = "T3rt";
+    
 }

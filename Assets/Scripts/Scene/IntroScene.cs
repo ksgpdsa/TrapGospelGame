@@ -3,9 +3,9 @@ namespace Scene
     public class IntroScene : Scene
     {
         private const string SceneName = Library.IntroScene;
-        private const string NextSceneName = Library.Level01;
+        private const string NextSceneName = Library.Menu;
 
-        protected override void EndScene()
+        public override void EndScene()
         {
             NextScene(NextSceneName);
         }

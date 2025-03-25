@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Resources
 {
@@ -8,6 +9,9 @@ namespace Resources
         [SerializeField] private float min;
         [SerializeField] private float max;
         [SerializeField] private float platformSpeed;
+        
+        private float randomVariation;
+        
         public float pausePlatformWaitTime;
         protected bool HorizontalDirection;
 
@@ -15,12 +19,20 @@ namespace Resources
         private bool goingUp = true;
         private bool isWaiting;
 
+        private void Awake()
+        {
+            randomVariation = Random.Range(1, 3);
+            var thisPosition = HorizontalDirection ? transform.position.x : transform.position.y;
+            min = thisPosition - min;
+            max = thisPosition + max;
+        }
+
         private void Update()
         {
             if (!isWaiting)
             {
                 // Atualiza o tempo de interpolação baseado na direção
-                interpolation += (goingUp ? 1 : -1) * platformSpeed * Time.deltaTime;
+                interpolation += (goingUp ? 1 : -1) * platformSpeed * randomVariation * Time.deltaTime;
 
                 // Aplica SmoothStep para suavizar a desaceleração nos extremos
                 var smoothT = Mathf.SmoothStep(0f, 1f, Mathf.PingPong(interpolation, 1f));

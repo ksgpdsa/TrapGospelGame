@@ -10,7 +10,7 @@ namespace Player
 
         private void Start()
         {
-            _spritePlayer = Player.GetComponent<SpriteRenderer>();
+            _spritePlayer = Owner.GetComponent<SpriteRenderer>();
             _spriteAttack = GetComponent<SpriteRenderer>();
             _rigidBodyAttack = GetComponent<Rigidbody2D>();
             

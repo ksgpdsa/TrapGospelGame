@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Respawn;
 using UI;
 using UnityEngine;
-using UnityEngine.Experimental.UIElements;
 
 namespace Player
 {
@@ -38,13 +38,15 @@ namespace Player
         private float _timerToNextAttack;
         private float _timerToNextJump;
         private SpriteRenderer _spriteRenderer;
-        private BoxCollider2D _boxCollider;
+        private bool _isInvulnerable;
 
         public abstract void AttackFromPlayer();
 
         protected void Awake()
         {
+            lives = PlayerPrefs.GetInt("PlayerLives", 0) > 0 ? PlayerPrefs.GetInt("PlayerLives", 0) : lives;
             lives = lives <= 5 ? lives : lives <= 0 ? 1 : 5; // para garantir que não vai ter mais que 5 e nem nascer morto
+            
             _playerGroundCheck = new PlayerGroundCheck(feetPosition, sizeCapsule, groundLayer, angleCapsule);
             _playerMovement = new PlayerMovement(this, _playerGroundCheck);
             _playerHealth = new PlayerHealth(lives, scoreOnDamage);
@@ -53,10 +55,18 @@ namespace Player
 
         protected void Start()
         {
+            var respawn = gameObject.GetComponent<PlayerRespawn>();
+            respawn.Respawn();
+            
             _hudControl = HudControl.StaticHudControl;
-            _hudControl.SetPlayerLivesInHud(lives);
+            
+            if (_hudControl)
+            {
+                _hudControl.SetPlayerLivesInHud(lives);
+            }
+            
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _boxCollider = GetComponent<BoxCollider2D>();
+            GetComponent<BoxCollider2D>();
         }
 
         private void Update()
@@ -119,8 +129,11 @@ namespace Player
                 {
                     calculatePercent = 0;
                 }
-                
-                HudControl.StaticHudControl.UpdateImageAttackSize(calculatePercent);
+
+                if (_hudControl)
+                {
+                    _hudControl.UpdateImageAttackSize(calculatePercent);
+                }
             }
 
             if (_timerToNextJump != 0)
@@ -135,25 +148,28 @@ namespace Player
                 }
                 
                 _playerMovement.SetTimerToNextJump(_timerToNextJump);
-            }
+            }   
             
             _playerMovement.ManageVelocityActions();
         }
 
         public void TakeDamage(int damage)
         {
-            var newLives = _playerHealth.TakeDamage(damage);
-            _hudControl.SetPlayerLivesInHud(newLives);
-
-            if (newLives > 0)
+            if (!_isInvulnerable)
             {
-                StartCoroutine(Damage());
+                var newLives = _playerHealth.TakeDamage(damage);
+                _hudControl.SetPlayerLivesInHud(newLives);
+
+                if (newLives > 0)
+                {
+                    StartCoroutine(Damage());
+                }
             }
         }
 
         private IEnumerator Damage()
         {
-            _boxCollider.enabled = false;
+            _isInvulnerable = true;
             _spriteRenderer.color = Color.red;
             yield return new WaitForSeconds(0.2f);
             _spriteRenderer.color = Color.white;
@@ -165,7 +181,8 @@ namespace Player
                 _spriteRenderer.enabled = true;
                 yield return new WaitForSeconds(0.15f);
             }
-            _boxCollider.enabled = true;
+            
+            _isInvulnerable = false;
         }
 
         public void GameOver()

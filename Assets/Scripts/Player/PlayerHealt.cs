@@ -1,4 +1,5 @@
 using UI;
+using UnityEngine;
 
 namespace Player
 {
@@ -15,22 +16,35 @@ namespace Player
 
         public int TakeDamage(int damage)
         {
-            _lives -= damage;
+            var newLive = GetPlayerLives() - damage;
+
+            SetPlayerLives(newLive);
             
             HudControl.StaticHudControl.RemoveScore(_scoreOnDamage);
 
-            if (_lives <= 0)
+            if (newLive <= 0)
             {
                 GameOver();
             }
             
-            return _lives;
+            return newLive;
         }
 
         public void GameOver()
         {
-            _lives = 0;
+            SetPlayerLives(0);
             HudControl.StaticHudControl.GameOver();
+        }
+
+        private void SetPlayerLives(int newLive)
+        {
+            _lives = newLive;
+            PlayerPrefs.SetInt(Library.PlayerPrefsPlayerLives, _lives);
+        }
+
+        public int GetPlayerLives()
+        {
+            return _lives;
         }
     }
 }

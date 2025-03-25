@@ -7,15 +7,20 @@ namespace Player
     {
         private int _damage;
         private bool hasDamaged;
-        protected GameObject Player;
+        protected GameObject Owner;
         protected float AttackVelocity;
         [SerializeField] private float autoDestructTime;
-        
-        public void Initialize(GameObject player, float attackVelocity, int damage)
+
+        public void Initialize(GameObject owner, float attackVelocity, int damage)
         {
-            Player = player;
+            Owner = owner;
             AttackVelocity = attackVelocity;
             _damage = damage;
+
+            if (Owner.CompareTag("Enemy"))
+            {
+                gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            }
         }
 
         private void Update()
@@ -32,18 +37,30 @@ namespace Player
 
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (col.gameObject.layer == LayerMask.NameToLayer("Enemy") && !hasDamaged)
+            if (hasDamaged || !Owner) return; // Evita múltiplos danos
+
+            if (Owner.CompareTag("Player") && col.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
+                // Ataque do Player atingindo um inimigo
                 var enemy = col.gameObject.GetComponentInParent<Enemy>();
                 
-                if (!enemy)
+                if (enemy)
                 {
-                    return;
+                    hasDamaged = true;
+                    enemy.TakeDamage(_damage);
+                    Destroy(gameObject);
                 }
+            }
+            else if (Owner.CompareTag("Enemy") && col.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                // Ataque do inimigo atingindo o Player
+                var player = col.gameObject.GetComponent<Player>(); // Supondo que o Player tem um script de vida
                 
-                hasDamaged = true;
-                enemy.TakeDamage(_damage);
-                Destroy(gameObject);
+                if (player)
+                {
+                    hasDamaged = true;
+                    player.TakeDamage(_damage);
+                }
             }
         }
     }

@@ -20,6 +20,7 @@ namespace Player
             base.Awake();
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public override void AttackFromPlayer()
         {
             var attackObject = Instantiate(attack, new Vector3(transform.position.x - 0.1f, transform.position.y - 0.1f, transform.position.z), Quaternion.identity);
