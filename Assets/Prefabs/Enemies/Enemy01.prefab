@@ -161,7 +161,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4ecea8521e75d48ab17b6477dc118e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackFrequency: 0.015
+  enemyLives: 1
   visionDistance: 3
-  arrowVelocity: 2
-  arrow: {fileID: 5721826932784430960, guid: 2ca3ba16f7441e74dba3cf6594629224, type: 3}
+  attack: {fileID: 5721826932784430960, guid: 2ca3ba16f7441e74dba3cf6594629224, type: 3}
+  attackVelocity: 2
+  attackFrequency: 0.5
+  takeDamage: 1
+  howTimeToNextAttack: 0
+  moveSpeed: 2
+  chaseSpeed: 1.2
+  jumpCooldown: 10
+  jumpForce: 6
+  walkLayers:
+    serializedVersion: 2
+    m_Bits: 2048
+  feetPosition: {fileID: 0}
+  sizeCapsule: {x: 0, y: 0}
+  angleCapsule: 0

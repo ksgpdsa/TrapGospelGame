@@ -26,4 +26,9 @@ public abstract class GameControl
     {
         SaveScore(score, levelName + (isFinalLevel ? "" : "Temp"));
     }
+
+    public static void BackToMainMenu()
+    {
+        SceneManager.LoadScene(Library.Menu);        
+    }
 }

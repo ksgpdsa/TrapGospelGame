@@ -1,34 +1,65 @@
+using System;
+using System.Collections.Generic;
+using Resources;
 using UI;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Enemies
 {
     public abstract class Enemy : MonoBehaviour
     {
-        private GameObject _player;
+        protected GameObject Player;
+        protected Sprite ThisSprite;
+        protected AnimationManager AnimationManager;
+        protected Rigidbody2D Rigidbody2D;
+        protected EnemyMovementController EnemyMovement;
+        protected EnemyAttackHandler AttackHandler;
+        protected bool IsInVision;
+        protected bool IsGrounded;
+        
         private Collider2D _collider2D;
         private EnemyHealth _enemyHealth;
-        
-        protected Rigidbody2D Rigidbody2D;
-        protected LocalAnimator LocalAnimator;
-        protected SpriteRenderer SpriteRenderer;
-        protected Sprite thisSprite;
-        
-        private float _attackTime;
-        private Vector2 _colliderDefault;
-        private Vector2 _colliderFlip;
+        private SpriteRenderer _spriteRenderer;
+        private EnemyEnvironmentChecker _enemyEnvironmentChecker;
+        private GameObject _currentPoint;
+        private bool _isWallAhead;
+        private bool _isCliffAhead;
+        private int _direction;
+        private bool _isWalking;
 
-        [SerializeField] private float attackFrequency;
-        [SerializeField] private float visionDistance;
+        [Header("Vida")]
         [SerializeField] private int enemyLives;
         
-        [SerializeField] protected float attackVelocity;
-        [SerializeField] protected int takeDamage;
+        [Header("Ataque")]
+        [SerializeField] protected float visionDistance;
         [SerializeField] protected GameObject attack;
+        [SerializeField] protected float attackVelocity;
+        [SerializeField] private float attackFrequency;
+        [SerializeField] protected int takeDamage;
+        [SerializeField] private float howTimeToNextAttack;
+        
+        [Header("Movimento")]
+        [SerializeField] private float moveSpeed = 2f;
+        [SerializeField] private float chaseSpeed = 1.2f;
+        [SerializeField] private float howTimeToNextJump = 10f;
+        [SerializeField] private float jumpForce = 6f;
+        [SerializeField] private LayerMask walkLayers;
+        [SerializeField] private Transform feetPosition;
+        [SerializeField] private Vector2 sizeCapsule;
+        [SerializeField] private float angleCapsule;
+        [SerializeField] private List<GameObject> points;
+        [SerializeField] private float howDistanceToPointPermitted = 1f;
 
         protected abstract int ScoreOnDeath { get; }
         protected abstract int ScoreOnHit { get; }
         protected abstract void InstantiateAttack();
+        protected abstract bool InstantiateAttackByAnimation { get; }
+        protected abstract bool HasZumbiMode { get; }
+        protected abstract bool HasPatrolMode { get; }
+        protected abstract bool HasFixedMode { get; }
+        protected abstract bool HasGoToPointsMode { get; }
 
         private void Awake()
         {
@@ -37,73 +68,77 @@ namespace Enemies
 
         protected void Start()
         {
-            LocalAnimator = new LocalAnimator(GetComponent<Animator>());
             Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-            SpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
             _collider2D = gameObject.GetComponent<Collider2D>();
             
-            thisSprite = SpriteRenderer.sprite;
-
-            _colliderDefault = new Vector2(_collider2D.offset.x, _collider2D.offset.y);
-            _colliderFlip = new Vector2(_collider2D.offset.x * -1, _collider2D.offset.y);
+            ThisSprite = _spriteRenderer.sprite;
+            Player = GameObject.FindGameObjectWithTag("Player");
             
-            _player = GameObject.FindGameObjectWithTag("Player");
+            AnimationManager = new AnimationManager(GetComponent<Animator>());
+            _enemyEnvironmentChecker = new EnemyEnvironmentChecker(walkLayers, transform, Player.transform, feetPosition, sizeCapsule, angleCapsule, 0);
+            EnemyMovement = new EnemyMovementController(chaseSpeed, Player.transform, transform, Rigidbody2D, AnimationManager, howTimeToNextJump, _spriteRenderer, _collider2D, moveSpeed, jumpForce);
+            AttackHandler = new EnemyAttackHandler(attackFrequency, AnimationManager);
+
+            _enemyHealth.StartLivesInHud();
+            _direction = EnemyMovement.GetDirection();
         }
 
-        protected void Update()
+        protected void FixedUpdate()
         {
-            ManageAttacks();
-            FlipToPlayer();
+            CheckEnvironment();
+
+            _direction = EnemyMovement.GetDirection();
+
+            MovementMode();
         }
 
-        private void ManageAttacks()
+        private void MovementMode()
         {
-            if (IsInVision() && _attackTime <= 0)
+            // Obtemos a direção do jogador
+            if (IsInVision)
             {
-                Attack();
+                if (HasZumbiMode)
+                {
+                    ZumbiMode();
+                }
+                else if (HasFixedMode)
+                {
+                    FixedMode();
+                }
             }
-            else if (_attackTime > 0)
+            else 
             {
-                _attackTime -= attackFrequency;
+                if (HasPatrolMode)
+                {
+                    PatrolMode();
+                }
+                else if(HasFixedMode)
+                {
+                    FixedMode();
+                } 
+                else if (HasGoToPointsMode && points != null && points.Count > 0)
+                {
+                    if (!_isWalking)
+                    {
+                        _currentPoint = GetRandomPoint(); // Escolhe um novo ponto apenas quando necessário
+                    }
+
+                    GoToPointsMode(_currentPoint);
+                }
             }
         }
 
-        private bool IsInVision()
+        private GameObject GetRandomPoint()
         {
-            bool result;
-            var playerPositionX = _player.transform.position.x;
-            var thisPositionX = transform.position.x;
-
-            if (playerPositionX > thisPositionX)
-            {
-                result = playerPositionX - thisPositionX < visionDistance;
-            }
-            else
-            {
-                result = thisPositionX - playerPositionX < visionDistance;
-            }
-            
-            return result;
+            var randomPoint = Random.Range(0, points.Count);
+            return points[randomPoint];
         }
 
-        private void FlipToPlayer()
-        {
-            if (IsInVision())
-            {
-                SpriteRenderer.flipX = _player.transform.position.x < transform.position.x;
-                _collider2D.offset = SpriteRenderer.flipX ? _colliderDefault : _colliderFlip;
-            }
-        }
 
-        private void Attack()
+        public void EndAttack()
         {
-            LocalAnimator.SetBoolAnimator(Library.Attack, true);
-        }
-
-        private void EndAttack()
-        {
-            _attackTime = 1;
-            LocalAnimator.SetBoolAnimator(Library.Attack, false);
+            AttackHandler.EndAttack();
         }
 
         public void TakeDamage(int damage)
@@ -112,6 +147,7 @@ namespace Enemies
             
             if (lives <= 0)
             {
+                HudControl.StaticHudControl.AddScore(ScoreOnDeath);
                 Defeated();
             }
             else
@@ -122,9 +158,95 @@ namespace Enemies
 
         protected virtual void Defeated()
         {
-            // StartCoroutine(HudControl.StaticHudControl.DefeatScene(_thisSprite));   
-            HudControl.StaticHudControl.AddScore(ScoreOnDeath);
             Destroy(gameObject);
+        }
+
+        private void CheckEnvironment()
+        {
+            _isCliffAhead = _enemyEnvironmentChecker.IsCliffAhead(_direction);
+            _isWallAhead = _enemyEnvironmentChecker.IsWallAhead(_direction);
+            IsInVision = _enemyEnvironmentChecker.CheckInVision(visionDistance);
+            IsGrounded = _enemyEnvironmentChecker.CheckIsGrounded();
+            
+            EnemyMovement.UpdateChasingStatus(visionDistance);
+        }
+
+        private void PatrolMode()
+        {
+            EnemyMovement.Walk(_direction);
+
+            // Se encontrar parede ou não tiver chão, vira
+            if (IsGrounded && (_isCliffAhead || _isWallAhead))
+            {
+                FlipByObstacle();
+            }
+        }
+
+        private void FlipByObstacle()
+        {
+            EnemyMovement.FlipDirection();
+            _direction = EnemyMovement.GetDirection();
+        }
+
+        private void GoToPointsMode(GameObject point)
+        {
+            if (point == null) return;
+    
+            var distanceToPoint = Vector2.Distance(transform.position, point.transform.position);
+    
+            // Se já chegou ao ponto, para e escolhe outro
+            if (distanceToPoint < howDistanceToPointPermitted)
+            {
+                EnemyMovement.StopWalk(IsGrounded);
+                _isWalking = false;
+                return;
+            }
+
+            // Se não está andando, define a direção e começa a andar
+            if (!_isWalking)
+            {
+                _direction = point.transform.position.x > transform.position.x ? 1 : -1;
+                _isWalking = true;
+            }
+
+            // Se encontrar parede ou não tiver chão, vira
+            if (IsGrounded && (_isCliffAhead || _isWallAhead))
+            {
+                FlipByObstacle();
+                return;
+            }
+
+            EnemyMovement.Walk(_direction);
+        }
+
+        private void ZumbiMode()
+        {
+            if (Math.Abs(Player.transform.position.x - transform.position.x) < 0.1)
+            {
+                EnemyMovement.StopWalk(IsGrounded);
+                return;
+            }
+            
+            // Se encontrar parede ou não tiver chão, vira
+            if (IsGrounded && (_isCliffAhead || _isWallAhead))
+            {
+                EnemyMovement.Jump(IsGrounded);
+            }
+            
+            EnemyMovement.FlipToPlayer();
+            _direction = EnemyMovement.GetDirection();
+            EnemyMovement.Walk(_direction);
+        }
+
+        private void FixedMode()
+        {
+            EnemyMovement.FlipToPlayer();
+        }
+        
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, visionDistance);
         }
     }
 }

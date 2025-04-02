@@ -1,8 +1,6 @@
 #if UNITY_PURCHASING || UNITY_UNIFIED_IAP
 using UnityEngine.Events;
 using UnityEngine.UI;
-using System.IO;
-using System.Collections.Generic;
 
 namespace UnityEngine.Purchasing
 {

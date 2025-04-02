@@ -41,26 +41,36 @@ namespace Player
 
             if (Owner.CompareTag("Player") && col.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                // Ataque do Player atingindo um inimigo
-                var enemy = col.gameObject.GetComponentInParent<Enemy>();
-                
-                if (enemy)
-                {
-                    hasDamaged = true;
-                    enemy.TakeDamage(_damage);
-                    Destroy(gameObject);
-                }
+                TakeDamageOnEnemy(col);
             }
             else if (Owner.CompareTag("Enemy") && col.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                // Ataque do inimigo atingindo o Player
-                var player = col.gameObject.GetComponent<Player>(); // Supondo que o Player tem um script de vida
-                
-                if (player)
-                {
-                    hasDamaged = true;
-                    player.TakeDamage(_damage);
-                }
+                TakeDamageOnPlayer(col);
+            }
+        }
+
+        private void TakeDamageOnPlayer(Collider2D col)
+        {
+            // Ataque do inimigo atingindo o Player
+            var player = col.gameObject.GetComponent<Player>();
+
+            if (player)
+            {
+                hasDamaged = true;
+                player.TakeDamage(_damage);
+            }
+        }
+
+        private void TakeDamageOnEnemy(Collider2D col)
+        {
+            // Ataque do Player atingindo um inimigo
+            var enemy = col.gameObject.GetComponentInParent<Enemy>();
+
+            if (enemy)
+            {
+                hasDamaged = true;
+                enemy.TakeDamage(_damage);
+                Destroy(gameObject);
             }
         }
     }

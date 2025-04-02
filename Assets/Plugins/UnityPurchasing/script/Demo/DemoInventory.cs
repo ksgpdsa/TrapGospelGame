@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace UnityEngine.Purchasing
+﻿namespace UnityEngine.Purchasing
 {
 	[AddComponentMenu("")]
 	public class DemoInventory : MonoBehaviour

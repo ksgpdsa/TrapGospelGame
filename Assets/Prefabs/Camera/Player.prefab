@@ -1100,6 +1100,7 @@ GameObject:
   - component: {fileID: 4633996018536646948}
   - component: {fileID: 4633996018536646950}
   - component: {fileID: 4633996018536646951}
+  - component: {fileID: 3541847617273723629}
   m_Layer: 0
   m_Name: Player
   m_TagString: MainCamera
@@ -1252,3 +1253,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3541847617273723629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4633996018536646944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 766f5602055e43278424bbe9fb767da2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterDatabase: {fileID: 11400000, guid: 07b412ce34f92324684be9c786027db8, type: 2}
+  levelName: Level01
+  sceneLevelName: Level 01 - 2
+  levelIcon: {fileID: 21300000, guid: 62e77de6e643e734da731680c39ba8fe, type: 3}

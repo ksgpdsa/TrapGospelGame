@@ -5,6 +5,7 @@ TextureImporter:
     21300000: background_sky_0
     21300002: background_sky_1
     21300004: background_sky_2
+    21300006: background_sky_3
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -48,7 +49,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 320
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -91,9 +92,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 288
-        width: 32
-        height: 32
+        y: 2880
+        width: 320
+        height: 320
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -101,7 +102,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b458b362cca1dba40980903c0a17bf37
+      spriteID: a0e670b5eb2236743906555a2d760523
       vertices: []
       indices: 
       edges: []
@@ -110,10 +111,10 @@ TextureImporter:
       name: background_sky_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 288
-        width: 32
-        height: 32
+        x: 320
+        y: 2880
+        width: 320
+        height: 320
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,7 +122,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8ceca46639ad19e4892953d3d784b8a8
+      spriteID: aa82e9c589292ff4b9ae6a3a506c4fcb
       vertices: []
       indices: 
       edges: []
@@ -130,10 +131,10 @@ TextureImporter:
       name: background_sky_2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 288
-        width: 32
-        height: 32
+        x: 640
+        y: 2880
+        width: 320
+        height: 320
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,7 +142,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a605777bb745a8840b75956e4f00786b
+      spriteID: 559c70ad7a4824c4eb459d7cac0f8660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: background_sky_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2560
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5e8843a8acfa2b4fbf39479991d3654
       vertices: []
       indices: 
       edges: []

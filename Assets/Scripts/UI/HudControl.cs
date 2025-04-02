@@ -30,14 +30,6 @@ namespace UI
         
         // Game Over
         [SerializeField] private Sprite iconGameOver;
-        [SerializeField] private GameObject panelGameOver;
-        [SerializeField] private TextMeshProUGUI textGameOver;
-        [SerializeField] private Image imageGameOver;
-        
-        // Defeat Enemy
-        [SerializeField] private GameObject panelDefeatEnemy;
-        [SerializeField] private TextMeshProUGUI textDefeatEnemy;
-        [SerializeField] private Image imageDefeatEnemy;
         
         // Item Collected
         [SerializeField] private GameObject itemPanel;
@@ -45,8 +37,6 @@ namespace UI
         [SerializeField] private Image itemImage;
         
         private CanvasGroup canvasItemGroup;
-        private CanvasGroup canvasGroupGameOver;
-        private CanvasGroup canvasGroupDefeatEnemy;
         
         private int _score;
 
@@ -64,8 +54,6 @@ namespace UI
             DontDestroyOnLoad(gameObject);
             
             canvasItemGroup = itemPanel.GetComponent<CanvasGroup>();
-            canvasGroupGameOver = panelGameOver.GetComponent<CanvasGroup>();
-            canvasGroupDefeatEnemy = panelDefeatEnemy.GetComponent<CanvasGroup>();
         }
 
         private void Start()
@@ -93,18 +81,7 @@ namespace UI
 
         public void UpdateImageAttackSize(float percentSize)
         {
-            var calculatePosition = CalculatePosition(percentSize);
-            
-            imageAttackBar.rectTransform.anchoredPosition = new Vector2(calculatePosition, 0);
-            imageAttackBar.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, percentSize);
-        }
-
-        private static float CalculatePosition(float percent)
-        {
-            const float min = -50f;
-            const float max = 0f;
-            
-            return min + (max - min) * (percent / 100);
+            imageAttackBar.fillAmount = percentSize / 100;
         }
 
         public void ShowAward(string awardName)
@@ -119,7 +96,7 @@ namespace UI
                 {
                     var message = awardName + " coletado !";
 
-                    StartCoroutine(ShowMessage(canvasItemGroup, message, sprite, itemText, itemImage, itemPanel, null));
+                    StartCoroutine(ShowMessage(message, sprite, null));
                     
                     AddScore(itemScore);
                 }
@@ -214,32 +191,42 @@ namespace UI
         
         private IEnumerator WaitAndReopenLevel()
         {
-            yield return StartCoroutine(ShowMessage(canvasGroupGameOver, "Game Over", iconGameOver, textGameOver, imageGameOver, panelGameOver, null));
+            yield return StartCoroutine(ShowMessage("Game Over", iconGameOver, null));
             
             GameControl.SaveScore(_score, levelName);
             GameControl.ReopenLevel();
         }
         
+        public IEnumerator NewLevelScene(string sceneName, Sprite levelIcon)
+        {
+            yield return StartCoroutine(ShowMessage(sceneName, levelIcon, null));
+        }
+        
         public IEnumerator DefeatScene(Sprite iconDefeatEnemy, [CanBeNull] string nextSceneName)
         {
-            yield return StartCoroutine(ShowMessage(canvasGroupDefeatEnemy, "Eliminado", iconDefeatEnemy, textDefeatEnemy, imageDefeatEnemy, panelDefeatEnemy, nextSceneName));
+            yield return StartCoroutine(ShowMessage("Eliminado", iconDefeatEnemy, nextSceneName));
+        }
+        
+        public IEnumerator UnlockCharacterScene(Sprite iconDefeatEnemy, [CanBeNull] string nextSceneName)
+        {
+            yield return StartCoroutine(ShowMessage("Personagem Desbloqueado", iconDefeatEnemy, nextSceneName));
         }
 
-        private IEnumerator ShowMessage(CanvasGroup canvasGroup, string message, Sprite icon, TextMeshProUGUI text, Image image, GameObject panel, [CanBeNull] string nextSceneName)
+        private IEnumerator ShowMessage(string message, [CanBeNull] Sprite icon, [CanBeNull] string nextSceneName)
         {
-            text.text = message;
-            image.sprite = icon;
-            panel.SetActive(true);
+            itemText.text = message;
+            itemImage.sprite = icon;
+            itemPanel.SetActive(true);
             
             Time.timeScale = 0f;
             
-            yield return StartCoroutine(FadeIn(canvasGroup));
+            yield return StartCoroutine(FadeIn(canvasItemGroup));
 
             yield return new WaitForSecondsRealtime(2f);
 
-            yield return StartCoroutine(FadeOut(canvasGroup));
+            yield return StartCoroutine(FadeOut(canvasItemGroup));
  
-            panel.SetActive(false);
+            itemPanel.SetActive(false);
             
             Time.timeScale = 1f;
 

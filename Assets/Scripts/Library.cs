@@ -24,5 +24,8 @@ public static class Library
     public const string Ksbatista = "Ksbatista";
     public const string RenanBatista = "RenanBatista";
     public const string T3rt = "T3rt";
-    
+
+    // Levels
+    public const string Level01 = "Level01";
+    public const string Level02 = "Level02";
 }

@@ -1,4 +1,5 @@
 using Character;
+using UI;
 using UnityEngine;
 
 namespace Scene
@@ -7,24 +8,26 @@ namespace Scene
     {
         [SerializeField] private CharacterDatabase characterDatabase;
         [SerializeField] private string levelName;
+        [SerializeField] private string sceneLevelName;
+        [SerializeField] private Sprite levelIcon;
         
         private string _nextSceneName;
         private GameObject _player;
 
         private void Awake()
         {
-            SpawnPlayer(); 
+            SpawnPlayer();
+            StartCoroutine(HudControl.StaticHudControl.NewLevelScene(sceneLevelName, levelIcon));
         }
         
         private void SpawnPlayer()
         {
             var selectedCharacter = PlayerPrefs.GetInt(Library.PlayerPrefsSelectedCharacter, 0); // Pega o personagem salvo
-            Debug.Log("Spawning player: " + selectedCharacter);
             
             var respawnPoint = FindRespawnPoint();
 
             if (respawnPoint != null && characterDatabase.CharacterCount > selectedCharacter &&
-                (levelName == "Level01" || PlayerPrefs.GetInt(Library.PlayerPrefsComplete + levelName, 0) != 0)
+                (levelName == "Level01" || PlayerPrefs.GetInt(Library.PlayerPrefsComplete + levelName, 0) != 0) // libera só se tiver o Level liberado ou se for o Level01
             ) {
                 Instantiate(characterDatabase.GetCharacter(selectedCharacter).gameObject, respawnPoint.transform.position, Quaternion.identity);
             }
@@ -42,7 +45,6 @@ namespace Scene
 
         public override void EndScene()
         {
-            PlayerPrefs.SetInt(Library.PlayerPrefsComplete + levelName, 1);
             _player = GameObject.FindGameObjectWithTag("Player");
             _player.GetComponent<Player.Player>();
             

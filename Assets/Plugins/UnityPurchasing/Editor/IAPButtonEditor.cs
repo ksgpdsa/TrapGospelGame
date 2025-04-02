@@ -1,9 +1,7 @@
 #if UNITY_PURCHASING || UNITY_UNIFIED_IAP
 
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Purchasing;
-using System.IO;
 using System.Collections.Generic;
 
 namespace UnityEditor.Purchasing

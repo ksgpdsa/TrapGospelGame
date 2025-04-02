@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Enemies
 {
@@ -6,6 +7,11 @@ namespace Enemies
     {
         protected override int ScoreOnDeath => 200;
         protected override int ScoreOnHit => 0;
+        protected override bool InstantiateAttackByAnimation => true;
+        protected override bool HasZumbiMode => false;
+        protected override bool HasPatrolMode => false;
+        protected override bool HasFixedMode => true;
+        protected override bool HasGoToPointsMode => false;
 
         protected override void InstantiateAttack()
         {
@@ -13,6 +19,11 @@ namespace Enemies
             var script = newArrow.GetComponent<Arrow>();
             
             script.Initialize(gameObject.GetComponent<SpriteRenderer>().flipX, attackVelocity, takeDamage);
+        }
+
+        private void Update()
+        {
+            AttackHandler.ManageAttacks(IsInVision, InstantiateAttack, InstantiateAttackByAnimation);
         }
     }
 }

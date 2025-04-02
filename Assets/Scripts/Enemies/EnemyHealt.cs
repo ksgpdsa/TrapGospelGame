@@ -1,4 +1,4 @@
-using UnityEngine;
+using UI;
 
 namespace Enemies
 {
@@ -11,9 +11,22 @@ namespace Enemies
             _lives = lives;
         }
 
+        public void StartLivesInHud()
+        {
+            if (HudControlEnemy.StaticHudControlEnemy != null)
+            {
+                HudControlEnemy.StaticHudControlEnemy.SetLivesInHud(_lives);
+            }
+        }
+
         public int TakeDamage(int damage)
         {
             _lives -= damage;
+
+            if (HudControlEnemy.StaticHudControlEnemy != null)
+            {
+                HudControlEnemy.StaticHudControlEnemy.SetLivesInHud(_lives);
+            }
 
             if (_lives <= 0)
             {
@@ -25,7 +38,6 @@ namespace Enemies
 
         private void Defeated()
         {
-            Debug.Log("Defeated !");
             _lives = 0;
         }
     }

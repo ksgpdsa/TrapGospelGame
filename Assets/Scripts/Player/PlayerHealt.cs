@@ -16,7 +16,7 @@ namespace Player
 
         public int TakeDamage(int damage)
         {
-            var newLive = GetPlayerLives() - damage;
+            var newLive = _lives - damage;
 
             SetPlayerLives(newLive);
             
@@ -40,11 +40,6 @@ namespace Player
         {
             _lives = newLive;
             PlayerPrefs.SetInt(Library.PlayerPrefsPlayerLives, _lives);
-        }
-
-        public int GetPlayerLives()
-        {
-            return _lives;
         }
     }
 }

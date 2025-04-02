@@ -20,7 +20,7 @@ namespace Items
             if (col.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 _animator.enabled = true;
-                Destroy(_animator, 1);
+                Destroy(_animator, 2);
                 Destroy(_collider2D);
             }
         }

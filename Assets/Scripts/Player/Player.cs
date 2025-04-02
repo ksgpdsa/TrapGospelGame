@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Resources;
 using Respawn;
 using UI;
 using UnityEngine;
@@ -11,12 +12,12 @@ namespace Player
         private HudControl _hudControl;
         private PlayerMovement _playerMovement;
         private PlayerHealth _playerHealth;
-        private PlayerGroundCheck _playerGroundCheck;
-        private LocalAnimator _localAnimator;
+        private AnimationManager _animationManager;
+        private PlayerEnvironmentChecker _playerEnvironmentChecker;
         
         [SerializeField] private Transform feetPosition;
         [SerializeField] private Vector2 sizeCapsule;
-        [SerializeField] private LayerMask groundLayer;
+        [SerializeField] private LayerMask walkLayers;
         [SerializeField] private float angleCapsule;
         [SerializeField] private float jumpForce;
         [SerializeField] private float moveForce;
@@ -24,6 +25,8 @@ namespace Player
         [SerializeField] private int scoreOnDamage;
         [SerializeField] private float howTimeToNextAttack;
         [SerializeField] private float howTimeToNextJump;
+        [SerializeField] private float escJumpSpeed;
+        [SerializeField] private float delayJumpTime;
         
         protected Dictionary<int, string> Awards;
         
@@ -39,74 +42,133 @@ namespace Player
         private float _timerToNextJump;
         private SpriteRenderer _spriteRenderer;
         private bool _isInvulnerable;
+        private AwardManager _awardManager;
+        private Rigidbody2D _rigidbody2D;
 
         public abstract void AttackFromPlayer();
 
         protected void Awake()
         {
-            lives = PlayerPrefs.GetInt("PlayerLives", 0) > 0 ? PlayerPrefs.GetInt("PlayerLives", 0) : lives;
-            lives = lives <= 5 ? lives : lives <= 0 ? 1 : 5; // para garantir que não vai ter mais que 5 e nem nascer morto
-            
-            _playerGroundCheck = new PlayerGroundCheck(feetPosition, sizeCapsule, groundLayer, angleCapsule);
-            _playerMovement = new PlayerMovement(this, _playerGroundCheck);
+            ManagePlayerLivesOnAwake();
+
+            _playerEnvironmentChecker = new PlayerEnvironmentChecker(feetPosition, sizeCapsule, walkLayers, angleCapsule, delayJumpTime);
+            _animationManager = new AnimationManager(GetComponent<Animator>());
+            _rigidbody2D = GetComponent<Rigidbody2D>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _playerMovement = new PlayerMovement(this, escJumpSpeed, _animationManager, _rigidbody2D, _spriteRenderer, howTimeToNextJump);
             _playerHealth = new PlayerHealth(lives, scoreOnDamage);
-            _localAnimator = new LocalAnimator(GetComponent<Animator>());
         }
 
         protected void Start()
         {
-            var respawn = gameObject.GetComponent<PlayerRespawn>();
-            respawn.Respawn();
+            ManageRespawnStart();
+            ManageHudControlStart();
+            _awardManager = new AwardManager(Awards, _hudControl);
+        }
+
+        private void Update()
+        {
+            ManageInputs();
+        }
+
+        private void FixedUpdate()
+        {
+            var isGrounded = _playerEnvironmentChecker.CheckIsGrounded();
             
+            ManageMovement(isGrounded);
+
+            ManageAttack();
+
+            ManageJump(isGrounded);
+        }
+        
+        private void ManagePlayerLivesOnAwake()
+        {
+            lives = PlayerPrefs.GetInt("PlayerLives", 0) > 0 ? PlayerPrefs.GetInt("PlayerLives", 0) : lives;
+            lives = lives <= 5 ? lives : lives <= 0 ? 1 : 5; // para garantir que não vai ter mais que 5 e nem nascer morto
+        }
+
+        private void ManageHudControlStart()
+        {
             _hudControl = HudControl.StaticHudControl;
-            
+
             if (_hudControl)
             {
                 _hudControl.SetPlayerLivesInHud(lives);
             }
-            
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-            GetComponent<BoxCollider2D>();
         }
 
-        private void Update()
+        private void ManageRespawnStart()
+        {
+            var respawn = gameObject.GetComponent<PlayerRespawn>();
+            respawn.Respawn();
+        }
+        
+        private void ManageInputs()
         {
             _jump = _jumpUI ? _jumpUI : Input.GetButton("Jump");
             _horizontal = _horizontalUI != 0 ? _horizontalUI : Input.GetAxis("Horizontal");
             _attack = _attackUI ? _attackUI : Input.GetButton("Fire1");
             _vertical = 0;
             // vertical = Input.GetAxis("Vertical");
-
-            _playerGroundCheck.Update();
         }
 
-        private void FixedUpdate()
+        private void ManageMovement(bool isGrounded)
         {
-            if (_jump)
-            {
-                _playerMovement.Jump(jumpForce);
-            }
-            
             if (_horizontal != 0 || _vertical != 0)
             {
                 _playerMovement.Move(_horizontal * moveForce, _vertical * moveForce);
-                _localAnimator.SetBoolAnimator(Library.IsMoving, true);
+                _animationManager.Move();
             }
             else
             {
-                if (_playerGroundCheck.GetIsGrounded() && !_jump)
+                if (isGrounded && !_jump)
                 {
                     _playerMovement.DontMove();
                 }
                 
-                _localAnimator.SetBoolAnimator(Library.IsMoving, false);
+                _animationManager.StopMove();
             }
+        }
 
+        private void ManageJump(bool isGrounded)
+        {
+            ManageJumpActions(isGrounded);
+            
+            _playerMovement.ManageJumpTimer(isGrounded);
+            
+            _animationManager.ManageJumpAnimations(isGrounded, _rigidbody2D.velocity.y);
+        }
+
+        private void ManageJumpActions(bool isGrounded)
+        {
+            var isDelayTouchGround = _playerEnvironmentChecker.CheckIsDelayTouchGround();
+            
+            if (_jump)
+            {
+                _playerMovement.Jump(jumpForce, isDelayTouchGround, isGrounded);
+            }
+            else
+            {
+                if (!isGrounded)
+                {
+                    _playerMovement.EscJump();
+                }
+            }
+        }
+
+        private void ManageAttack()
+        {
             if (_attack)
             {
                 _timerToNextAttack = _playerMovement.Attack();
             }
 
+            ManageAttackTimer();
+        }
+
+        private void ManageAttackTimer()
+        {
             if (_timerToNextAttack != 0)
             {
                 if (_timerToNextAttack > 0)
@@ -117,40 +179,31 @@ namespace Player
                 {
                     _timerToNextAttack = 0;
                 }
-                
-                _playerMovement.SetTimerToNextAttack(_timerToNextAttack);
 
-                var calculatePercent = 100 - _timerToNextAttack * 100;
-
-                if (calculatePercent > 100)
-                {
-                    calculatePercent = 100;
-                }else if (calculatePercent < 0)
-                {
-                    calculatePercent = 0;
-                }
+                var calculatePercent = CalculatePercentToNextAttack();
 
                 if (_hudControl)
                 {
                     _hudControl.UpdateImageAttackSize(calculatePercent);
                 }
             }
+        }
 
-            if (_timerToNextJump != 0)
-            {
-                if (_timerToNextJump > 0)
-                {
-                    _timerToNextJump -= howTimeToNextJump * Time.fixedDeltaTime;
-                }
-                else if (_timerToNextJump < 0)
-                {
-                    _timerToNextJump = 0;
-                }
-                
-                _playerMovement.SetTimerToNextJump(_timerToNextJump);
-            }   
+        private float CalculatePercentToNextAttack()
+        {
+            _playerMovement.SetTimerToNextAttack(_timerToNextAttack);
             
-            _playerMovement.ManageVelocityActions();
+            var calculatePercent = 100 - _timerToNextAttack * 100;
+
+            if (calculatePercent > 100)
+            {
+                calculatePercent = 100;
+            }else if (calculatePercent < 0)
+            {
+                calculatePercent = 0;
+            }
+
+            return calculatePercent;
         }
 
         public void TakeDamage(int damage)
@@ -233,27 +286,12 @@ namespace Player
 
         public void SetRandomAward()
         {
-            if (Awards.Count > 0)
-            {
-                var randomAward = GetRandomEntry(Awards);
-                
-                _hudControl.ShowAward(randomAward.Value);
-            }
+            _awardManager.SetRandomAward();
         }
 
-        private static KeyValuePair<int, string> GetRandomEntry(Dictionary<int, string> dict)
+        private void OnDrawGizmosSelected()
         {
-            var keys = new List<int>(dict.Keys);
-            
-            var random = new System.Random();
-            var randomIndex = random.Next(keys.Count);
-            
-            var randomKey = keys[randomIndex];
-            var value = dict[randomKey];
-            
-            dict.Remove(randomKey);
-            
-            return new KeyValuePair<int, string>(randomKey, value);
+            _playerEnvironmentChecker.OnDrawGizmosSelected();
         }
     }
 }

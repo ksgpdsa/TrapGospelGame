@@ -13,11 +13,7 @@ namespace UI
             {
                 var button = gameObject.GetComponent<Button>();
                 
-                button.enabled = true;
-                
-                var image = button.GetComponent<Image>();
-                
-                image.color = new Color(191, 36, 42, 255);
+                button.interactable = true;
             }
         }
     }
