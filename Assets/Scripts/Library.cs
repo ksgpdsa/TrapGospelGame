@@ -17,6 +17,7 @@ public static class Library
     public const string PlayerPrefsSelectedCharacter = "SelectedCharacter";
     public const string PlayerPrefsPlayerLives = "PlayerLives";
     public const string PlayerPrefsSavedScore = "SavedScore";
+    public const string PlayerPrefsRespawnPoint = "RespawnPoint";
     public const string PlayerPrefsComplete = "PlayerPrefsComplete"; // Level Complete
     public const string PlayerPrefsPurchasedCharacter = "PurchasedCharacter";
     

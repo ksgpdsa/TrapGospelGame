@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Ksbatista
-  valor: {fileID: 5064965090219574602}
+  valor: {fileID: 1325674197166195417}
   buttonPurchase: {fileID: 805074558819530136}
   buttonChoiceCharacter: {fileID: 5066105651556514396}
 --- !u!1001 &5652265633003110105
@@ -288,9 +288,9 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5652265633003110105}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5064965090219574602 stripped
+--- !u!114 &1325674197166195417 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 592996648670903187, guid: 8e963fa3ba3b22c4981e5aff9523eaba,
+  m_CorrespondingSourceObject: {fileID: 6635310841043516416, guid: 8e963fa3ba3b22c4981e5aff9523eaba,
     type: 3}
   m_PrefabInstance: {fileID: 5652265633003110105}
   m_PrefabAsset: {fileID: 0}

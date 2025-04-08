@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: T3rt
-  valor: {fileID: 8198390979304475226}
+  valor: {fileID: 2731831653289758153}
   buttonPurchase: {fileID: 4368743190780148360}
   buttonChoiceCharacter: {fileID: 8197320967117141324}
 --- !u!1001 &8789960392055157193
@@ -288,9 +288,9 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 8789960392055157193}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8198390979304475226 stripped
+--- !u!114 &2731831653289758153 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 592996648670903187, guid: 8e963fa3ba3b22c4981e5aff9523eaba,
+  m_CorrespondingSourceObject: {fileID: 6635310841043516416, guid: 8e963fa3ba3b22c4981e5aff9523eaba,
     type: 3}
   m_PrefabInstance: {fileID: 8789960392055157193}
   m_PrefabAsset: {fileID: 0}

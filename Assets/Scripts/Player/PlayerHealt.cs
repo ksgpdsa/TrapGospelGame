@@ -1,4 +1,3 @@
-using UI;
 using UnityEngine;
 
 namespace Player
@@ -20,12 +19,7 @@ namespace Player
 
             SetPlayerLives(newLive);
             
-            HudControl.StaticHudControl.RemoveScore(_scoreOnDamage);
-
-            if (newLive <= 0)
-            {
-                GameOver();
-            }
+            GameControl.StaticGameControl.RemoveScore(_scoreOnDamage);
             
             return newLive;
         }
@@ -33,7 +27,7 @@ namespace Player
         public void GameOver()
         {
             SetPlayerLives(0);
-            HudControl.StaticHudControl.GameOver();
+            GameControl.StaticGameControl.GameOver();
         }
 
         private void SetPlayerLives(int newLive)

@@ -69,9 +69,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingLayerID: -700232215
+  m_SortingLayer: 3
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a96f1fa937f310b48ba3492353f82c03, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -168,9 +168,10 @@ MonoBehaviour:
   attackFrequency: 0.5
   takeDamage: 1
   howTimeToNextAttack: 0
+  knockBackForceOnTouch: 3
   moveSpeed: 2
   chaseSpeed: 1.2
-  jumpCooldown: 10
+  howTimeToNextJump: 10
   jumpForce: 6
   walkLayers:
     serializedVersion: 2
@@ -178,3 +179,6 @@ MonoBehaviour:
   feetPosition: {fileID: 0}
   sizeCapsule: {x: 0, y: 0}
   angleCapsule: 0
+  points: []
+  howDistanceToPointPermitted: 1
+  jumpByKnockBack: 1

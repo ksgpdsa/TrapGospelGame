@@ -6,8 +6,8 @@ public class GameOver : MonoBehaviour
     {
         if (col.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            var player = col.gameObject.GetComponent<Player.Player>();
-            player.GameOver();
+            var playerHealth = col.gameObject.GetComponent<Player.Player>();
+            playerHealth.GameOver();
         }
         else
         {

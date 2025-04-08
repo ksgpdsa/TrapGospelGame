@@ -1,18 +1,16 @@
 using System.Collections.Generic;
 using UI;
-using UnityEngine;
 
 namespace Resources
 {
     public class AwardManager
     {
         private readonly Dictionary<int,string> _awards;
-        private readonly HudControl _hudControl;
+        private int awardScore = 1000; // todo: ver uma maneira melhor de definir isso
 
-        public AwardManager(Dictionary<int, string> awards, HudControl hudControl)
+        public AwardManager(Dictionary<int, string> awards)
         {
             _awards = awards;
-            _hudControl = hudControl;
         }
 
         public void SetRandomAward()
@@ -21,7 +19,7 @@ namespace Resources
             {
                 var randomAward = GetRandomEntry(_awards);
                 
-                _hudControl.ShowAward(randomAward.Value);
+                HudControl.StaticHudControl.ShowAward(randomAward.Value, awardScore);
             }
         }
 

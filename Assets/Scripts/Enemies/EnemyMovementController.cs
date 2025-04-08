@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Enemies
 {
-    public class EnemyMovementController
+    public class EnemyMovementController : Movement
     {
         private readonly Transform _player;
         private readonly Transform _enemy;
@@ -11,7 +11,6 @@ namespace Enemies
         private readonly AnimationManager _animationManager;
         private readonly SpriteRenderer _spriteRenderer;
         private readonly Collider2D _collider2D;
-        private readonly float _howTimeToNextJump;
         private readonly float _chaseSpeed;
         private readonly float _moveSpeed;
         private readonly float _jumpForce;
@@ -19,31 +18,30 @@ namespace Enemies
         private readonly Vector2 _colliderFlip;
         
         private int _direction;
-        private float _timerToNextJump;
         private bool _isInVision;
 
-        public EnemyMovementController(float chaseSpeed, Transform player, Transform enemy, Rigidbody2D rigidbody2D, AnimationManager animationManager, float howTimeToNextJump, SpriteRenderer spriteRenderer, Collider2D collider2D, float moveSpeed, float jumpForce)
+        public EnemyMovementController(float chaseSpeed, Transform player, Transform enemy, Rigidbody2D rigidbody2D, AnimationManager animationManager, SpriteRenderer spriteRenderer, Collider2D collider2D, float moveSpeed, float jumpForce) : base(rigidbody2D)
         {
             _chaseSpeed = chaseSpeed;
             _player = player;
             _enemy = enemy;
             _rigidbody2D = rigidbody2D;
             _animationManager = animationManager;
-            _howTimeToNextJump = howTimeToNextJump;
             _spriteRenderer = spriteRenderer;
             _collider2D = collider2D;
             _moveSpeed = moveSpeed;
             _jumpForce = jumpForce;
-
-            _timerToNextJump = 0;
+            
             _colliderDefault = new Vector2(collider2D.offset.x, collider2D.offset.y);
             _colliderFlip = new Vector2(collider2D.offset.x * -1, collider2D.offset.y);
             
             FlipToPlayer();
         }
 
-        public void Walk(int direction)
+        public void Walk(int direction, bool isInvulnerable)
         {
+            if (isInvulnerable) return;
+            
             var currentSpeed = _isInVision ? _chaseSpeed : _moveSpeed;
             
             SetDirection(direction);
@@ -51,31 +49,19 @@ namespace Enemies
             _animationManager.Move();
         }
 
-        public void StopWalk(bool isGrounded)
+        public void StopWalk()
         {
-            if (isGrounded && _howTimeToNextJump > 0)
+            if (!_animationManager.GetBoolAnimator(Library.IsFalling))
             {
-                if (!_animationManager.GetBoolAnimator(Library.IsFalling))
-                {
-                    _rigidbody2D.velocity = new Vector2(0, 0);
-                }
+                _rigidbody2D.velocity = new Vector2(0, 0);
             }
-        
+    
             _animationManager.StopMove();
         }
 
-        public void Jump(bool isGrounded)
+        public void Jump()
         {
-            if (_timerToNextJump > 0)
-            {
-                _timerToNextJump -= Time.fixedDeltaTime;
-            }
-
-            if (isGrounded && _timerToNextJump <= 0)
-            {
-                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpForce);
-                _timerToNextJump = _howTimeToNextJump;
-            }
+            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpForce);
         }
         
         public void FlipDirection()

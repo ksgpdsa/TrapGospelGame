@@ -1,34 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Resources;
-using UI;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Enemies
 {
     public abstract class Enemy : MonoBehaviour
     {
-        protected GameObject Player;
-        protected Sprite ThisSprite;
-        protected AnimationManager AnimationManager;
-        protected Rigidbody2D Rigidbody2D;
-        protected EnemyMovementController EnemyMovement;
-        protected EnemyAttackHandler AttackHandler;
-        protected bool IsInVision;
-        protected bool IsGrounded;
-        
-        private Collider2D _collider2D;
-        private EnemyHealth _enemyHealth;
-        private SpriteRenderer _spriteRenderer;
-        private EnemyEnvironmentChecker _enemyEnvironmentChecker;
-        private GameObject _currentPoint;
-        private bool _isWallAhead;
-        private bool _isCliffAhead;
-        private int _direction;
-        private bool _isWalking;
-
         [Header("Vida")]
         [SerializeField] private int enemyLives;
         
@@ -39,6 +19,7 @@ namespace Enemies
         [SerializeField] private float attackFrequency;
         [SerializeField] protected int takeDamage;
         [SerializeField] private float howTimeToNextAttack;
+        [SerializeField] private float knockBackForceOnTouch = 3f;
         
         [Header("Movimento")]
         [SerializeField] private float moveSpeed = 2f;
@@ -51,6 +32,30 @@ namespace Enemies
         [SerializeField] private float angleCapsule;
         [SerializeField] private List<GameObject> points;
         [SerializeField] private float howDistanceToPointPermitted = 1f;
+        [SerializeField] private float jumpByKnockBack = 1f;
+        
+        private Collider2D _collider2D;
+        private EnemyHealth _enemyHealth;
+        private SpriteRenderer _spriteRenderer;
+        private EnemyEnvironmentChecker _enemyEnvironmentChecker;
+        private GameObject _currentPoint;
+        private Player.Player _playerScript;
+        private bool _isWallAhead;
+        private bool _isCliffAhead;
+        private int _direction;
+        private bool _isWalking;
+        private bool _blockJump;
+        private float _timerToNextJump;
+
+        protected GameObject Player;
+        protected Sprite ThisSprite;
+        protected AnimationManager AnimationManager;
+        protected Rigidbody2D Rigidbody2D;
+        protected EnemyMovementController EnemyMovement;
+        protected EnemyAttackHandler AttackHandler;
+        protected bool IsInVision;
+        protected bool IsGrounded;
+        protected bool CanJump;
 
         protected abstract int ScoreOnDeath { get; }
         protected abstract int ScoreOnHit { get; }
@@ -74,23 +79,35 @@ namespace Enemies
             
             ThisSprite = _spriteRenderer.sprite;
             Player = GameObject.FindGameObjectWithTag("Player");
+            _playerScript = Player.GetComponent<Player.Player>();
             
             AnimationManager = new AnimationManager(GetComponent<Animator>());
             _enemyEnvironmentChecker = new EnemyEnvironmentChecker(walkLayers, transform, Player.transform, feetPosition, sizeCapsule, angleCapsule, 0);
-            EnemyMovement = new EnemyMovementController(chaseSpeed, Player.transform, transform, Rigidbody2D, AnimationManager, howTimeToNextJump, _spriteRenderer, _collider2D, moveSpeed, jumpForce);
+            EnemyMovement = new EnemyMovementController(chaseSpeed, Player.transform, transform, Rigidbody2D, AnimationManager, _spriteRenderer, _collider2D, moveSpeed, jumpForce);
             AttackHandler = new EnemyAttackHandler(attackFrequency, AnimationManager);
 
             _enemyHealth.StartLivesInHud();
             _direction = EnemyMovement.GetDirection();
+            ManageCanJump();
         }
 
         protected void FixedUpdate()
         {
             CheckEnvironment();
 
+            ManageTimerToNextJump();
+
             _direction = EnemyMovement.GetDirection();
 
             MovementMode();
+        }
+
+        private void ManageTimerToNextJump()
+        {
+            if (_timerToNextJump > 0)
+            {
+                _timerToNextJump -= Time.fixedDeltaTime;
+            }
         }
 
         private void MovementMode()
@@ -141,24 +158,32 @@ namespace Enemies
             AttackHandler.EndAttack();
         }
 
-        public void TakeDamage(int damage)
+        public void TakeDamage(int damage, float knockBackForce, Vector2 knockBackDirection)
         {
             var lives = _enemyHealth.TakeDamage(damage);
+
+            EnemyMovement.KnockBack(knockBackForce, knockBackDirection, jumpByKnockBack);
             
             if (lives <= 0)
             {
-                HudControl.StaticHudControl.AddScore(ScoreOnDeath);
-                Defeated();
+                GameControl.StaticGameControl.AddScore(ScoreOnDeath);
+                Defeated(knockBackForce);
             }
             else
             {
-                HudControl.StaticHudControl.AddScore(ScoreOnHit);
+                GameControl.StaticGameControl.AddScore(ScoreOnHit);
             }
         }
 
-        protected virtual void Defeated()
+        protected virtual void Defeated(float knockBackForce)
         {
+            // StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(WaitKnockBack(knockBackForce)));
             Destroy(gameObject);
+        }
+
+        protected IEnumerator WaitKnockBack(float waitTime)
+        {
+            yield return new WaitForSeconds(waitTime);
         }
 
         private void CheckEnvironment()
@@ -166,14 +191,14 @@ namespace Enemies
             _isCliffAhead = _enemyEnvironmentChecker.IsCliffAhead(_direction);
             _isWallAhead = _enemyEnvironmentChecker.IsWallAhead(_direction);
             IsInVision = _enemyEnvironmentChecker.CheckInVision(visionDistance);
-            IsGrounded = _enemyEnvironmentChecker.CheckIsGrounded();
+            SetIsGrounded(_enemyEnvironmentChecker.CheckIsGrounded());
             
             EnemyMovement.UpdateChasingStatus(visionDistance);
         }
 
         private void PatrolMode()
         {
-            EnemyMovement.Walk(_direction);
+            EnemyMovement.Walk(_direction, _playerScript.GetIsInvulnerable());
 
             // Se encontrar parede ou não tiver chão, vira
             if (IsGrounded && (_isCliffAhead || _isWallAhead))
@@ -197,9 +222,12 @@ namespace Enemies
             // Se já chegou ao ponto, para e escolhe outro
             if (distanceToPoint < howDistanceToPointPermitted)
             {
-                EnemyMovement.StopWalk(IsGrounded);
-                _isWalking = false;
-                return;
+                if (IsGrounded && howTimeToNextJump > 0)
+                {
+                    EnemyMovement.StopWalk();
+                    _isWalking = false;
+                    return;
+                }
             }
 
             // Se não está andando, define a direção e começa a andar
@@ -216,26 +244,43 @@ namespace Enemies
                 return;
             }
 
-            EnemyMovement.Walk(_direction);
+            EnemyMovement.Walk(_direction, _playerScript.GetIsInvulnerable());
+        }
+        
+        // Método para atacar o jogador e se afastar
+        private void AttackPlayer()
+        {
+            Vector2 direction = transform.position - Player.transform.position;
+            _playerScript.TakeDamage(takeDamage, knockBackForceOnTouch, direction);
         }
 
         private void ZumbiMode()
         {
             if (Math.Abs(Player.transform.position.x - transform.position.x) < 0.1)
             {
-                EnemyMovement.StopWalk(IsGrounded);
+                if (IsGrounded && howTimeToNextJump > 0)
+                {
+                    EnemyMovement.StopWalk();
+                }
+                
+                if (Math.Abs(Player.transform.position.y - transform.position.y) < _collider2D.transform.localScale.y)
+                {
+                    AttackPlayer();
+                }
+                
                 return;
             }
             
-            // Se encontrar parede ou não tiver chão, vira
-            if (IsGrounded && (_isCliffAhead || _isWallAhead))
+            // Se encontrar parede ou não tiver chão, Pula
+            if (CanJump && (_isCliffAhead || _isWallAhead))
             {
-                EnemyMovement.Jump(IsGrounded);
+                EnemyMovement.Jump();
+                _timerToNextJump = howTimeToNextJump;
             }
             
             EnemyMovement.FlipToPlayer();
             _direction = EnemyMovement.GetDirection();
-            EnemyMovement.Walk(_direction);
+            EnemyMovement.Walk(_direction, _playerScript.GetIsInvulnerable());
         }
 
         private void FixedMode()
@@ -247,6 +292,23 @@ namespace Enemies
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, visionDistance);
+        }
+
+        private void SetIsGrounded(bool value)
+        {
+            IsGrounded = value;
+            ManageCanJump();
+        }
+
+        public void SetBlockJump(bool value)
+        {
+            _blockJump = value;
+            ManageCanJump();
+        }
+        
+        private void ManageCanJump()
+        {
+            CanJump = IsGrounded && _timerToNextJump <= 0 && !_blockJump;
         }
     }
 }

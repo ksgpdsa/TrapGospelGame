@@ -1,5 +1,5 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Character
 {
@@ -7,9 +7,9 @@ namespace Character
     {
         [SerializeField] private CharacterDatabase characterDatabase;
         
-        [SerializeField] private Text nameText;
+        [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private GameObject characterPrefab;
-        [SerializeField] private UnityEngine.Camera camera;
+        [SerializeField] private UnityEngine.Camera cameraScene;
         
         private int selectedCharacter;
         
@@ -66,7 +66,7 @@ namespace Character
         {
             PlayerPrefs.SetInt(Library.PlayerPrefsSelectedCharacter, selectedCharacter);
 
-            var scene = camera.GetComponent<Scene.Scene>();
+            var scene = cameraScene.GetComponent<Scene.Scene>();
             
             scene.EndScene();
         }

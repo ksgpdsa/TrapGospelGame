@@ -1,4 +1,5 @@
 using Character;
+using Respawn;
 using UI;
 using UnityEngine;
 
@@ -10,44 +11,43 @@ namespace Scene
         [SerializeField] private string levelName;
         [SerializeField] private string sceneLevelName;
         [SerializeField] private Sprite levelIcon;
+        [SerializeField] private bool isFinalLevel;
+        [SerializeField] private float timeLevel = 300f;
         
         private string _nextSceneName;
-        private GameObject _player;
 
         private void Awake()
         {
+            GameControl.StaticGameControl.SetInLevel(true);
+            GameControl.StaticGameControl.SetLevelName(sceneLevelName); 
+            GameControl.StaticGameControl.SetLevelTime(timeLevel);
             SpawnPlayer();
-            StartCoroutine(HudControl.StaticHudControl.NewLevelScene(sceneLevelName, levelIcon));
+            StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.NewLevelScene(sceneLevelName, levelIcon)));
         }
         
         private void SpawnPlayer()
         {
             var selectedCharacter = PlayerPrefs.GetInt(Library.PlayerPrefsSelectedCharacter, 0); // Pega o personagem salvo
+            var player = characterDatabase.GetCharacter(selectedCharacter).gameObject;
+            var playerRespawn = player.GetComponent<PlayerRespawn>();
             
-            var respawnPoint = FindRespawnPoint();
+            var respawnPoint = playerRespawn.FindRespawnPoint();
 
             if (respawnPoint != null && characterDatabase.CharacterCount > selectedCharacter &&
                 (levelName == "Level01" || PlayerPrefs.GetInt(Library.PlayerPrefsComplete + levelName, 0) != 0) // libera só se tiver o Level liberado ou se for o Level01
             ) {
-                Instantiate(characterDatabase.GetCharacter(selectedCharacter).gameObject, respawnPoint.transform.position, Quaternion.identity);
+                Instantiate(player, respawnPoint.transform.position, Quaternion.identity);
             }
             else
             {
                 Debug.LogError("Nenhum ponto de respawn encontrado ou personagem inválido!");
             }
         }
-        
-        private static GameObject FindRespawnPoint()
-        {
-            var respawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
-            return respawnPoints.Length > 0 ? respawnPoints[0] : null; // Retorna o primeiro encontrado
-        }
 
         public override void EndScene()
         {
-            _player = GameObject.FindGameObjectWithTag("Player");
-            _player.GetComponent<Player.Player>();
-            
+            GameControl.StaticGameControl.SetInLevel(false);
+            GameControl.CompleteLevel(0, sceneLevelName, isFinalLevel);
             NextScene(_nextSceneName);
         }
         

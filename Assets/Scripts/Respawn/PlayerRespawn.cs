@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace Respawn
 {
@@ -6,24 +7,25 @@ namespace Respawn
     {
         private Vector3? _respawnPoint;
 
-        private void Start()
+        public GameObject FindRespawnPoint()
         {
-            var respawnObject = FindRespawnPoint();
-        
-            if (respawnObject)
-            {
-                _respawnPoint = respawnObject.transform.position;
-            }
-        }
-        
-        private GameObject FindRespawnPoint()
-        {
+            var respawnNumber = GameControl.LoadRespawnPoint();
+            
             // Procura todos os objetos na layer "Respawn"
             var respawnObjects = GameObject.FindGameObjectsWithTag("Respawn");
 
             if (respawnObjects.Length > 0)
             {
-                return respawnObjects[0]; // Retorna o primeiro que encontrar
+                var respawnPointGameObject = (
+                    from respawnObject in respawnObjects 
+                        let respawnScript = respawnObject.GetComponent<RespawnPoint>()
+                        where respawnScript.GetRespawnNumber() == respawnNumber
+                    select respawnObject
+                ).FirstOrDefault();
+                
+                _respawnPoint = respawnPointGameObject?.transform.position;
+                
+                return respawnPointGameObject;
             }
 
             return null;
@@ -33,7 +35,9 @@ namespace Respawn
         {
             if (_respawnPoint != null)
             {
-                transform.position = _respawnPoint.Value; // Teletransporta o jogador para o ponto salvo
+                var respawnPosition = _respawnPoint.Value;
+                respawnPosition.y += 0.7f;
+                transform.position = respawnPosition; // Teletransporta o jogador para o ponto salvo
             }
         }
 
@@ -41,7 +45,8 @@ namespace Respawn
         {
             if (other.CompareTag("Respawn"))
             {
-                _respawnPoint = other.transform.position; // Atualiza o ponto de respawn
+                var respawnScript = other.gameObject.GetComponent<RespawnPoint>();
+                GameControl.SaveRespawnPoint(respawnScript.GetRespawnNumber());
             }
         }
     }

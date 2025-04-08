@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Enemies
 {
@@ -18,7 +17,7 @@ namespace Enemies
             var newArrow = Instantiate(attack, new Vector3(transform.position.x - 0.1f, transform.position.y - 0.1f, transform.position.z), Quaternion.identity);
             var script = newArrow.GetComponent<Arrow>();
             
-            script.Initialize(gameObject.GetComponent<SpriteRenderer>().flipX, attackVelocity, takeDamage);
+            script.Initialize(gameObject, attackVelocity, takeDamage);
         }
 
         private void Update()

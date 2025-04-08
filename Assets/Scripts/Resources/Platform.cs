@@ -47,7 +47,7 @@ namespace Resources
                 // Verifica se chegou ao limite e inicia a pausa
                 if (interpolation >= 1f || interpolation <= 0f)
                 {
-                    StartCoroutine(WaitAtPoint());
+                    StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(WaitAtPoint()));
                 }
             }
         }

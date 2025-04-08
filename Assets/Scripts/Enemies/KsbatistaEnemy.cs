@@ -1,4 +1,5 @@
-using Player;
+using System.Collections;
+using Player.Attacks;
 using UI;
 using UnityEngine;
 
@@ -19,14 +20,15 @@ namespace Enemies
             var attackPosition = new Vector3(transform.position.x + 0.5f, transform.position.y - 0.1f, transform.position.z);
             
             var newAttack = Instantiate(attack, attackPosition, Quaternion.identity);
-            var script = newAttack.GetComponent<Attack01>();
+            var script = newAttack.GetComponent<Attack>();
 
             script.Initialize(gameObject, attackVelocity, takeDamage);
         }
 
-        protected override void Defeated()
+        protected override void Defeated(float knockBackForce)
         {
-            StartCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite,nextScene)); 
+            // StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(WaitKnockBack(knockBackForce)));
+            StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite,nextScene)));
         }
     }
 }

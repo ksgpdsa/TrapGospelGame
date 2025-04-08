@@ -1,4 +1,4 @@
-using Player;
+using Player.Attacks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +11,7 @@ namespace Enemies
             var attackPosition = new Vector3(transform.position.x + 0.5f, transform.position.y - 0.1f, transform.position.z);
             
             var newAttack = Instantiate(attack, attackPosition, Quaternion.identity);
-            var script = newAttack.GetComponent<Attack01>();
+            var script = newAttack.GetComponent<SingAttack>();
 
             script.Initialize(gameObject, attackVelocity, takeDamage);
         }
@@ -64,7 +64,7 @@ namespace Enemies
 
                 if (randomChoice < 0.1f || randomChoice > 0.9f)
                 {
-                    EnemyMovement.Jump(IsGrounded);
+                    EnemyMovement.Jump();
                 }
                 
                 if (randomChoice < 0.5f)

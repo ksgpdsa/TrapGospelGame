@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: RenanBatista
-  valor: {fileID: 8661683370434947655}
+  valor: {fileID: 3178301503615675860}
   buttonPurchase: {fileID: 3842158462930803349}
   buttonChoiceCharacter: {fileID: 8660503412438979921}
 --- !u!1001 &8074607155000922580
@@ -288,9 +288,9 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 8074607155000922580}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8661683370434947655 stripped
+--- !u!114 &3178301503615675860 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 592996648670903187, guid: 8e963fa3ba3b22c4981e5aff9523eaba,
+  m_CorrespondingSourceObject: {fileID: 6635310841043516416, guid: 8e963fa3ba3b22c4981e5aff9523eaba,
     type: 3}
   m_PrefabInstance: {fileID: 8074607155000922580}
   m_PrefabAsset: {fileID: 0}

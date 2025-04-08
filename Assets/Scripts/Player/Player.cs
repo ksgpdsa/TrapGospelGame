@@ -4,17 +4,12 @@ using Resources;
 using Respawn;
 using UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Player
 {
     public abstract class Player : MonoBehaviour
     {
-        private HudControl _hudControl;
-        private PlayerMovement _playerMovement;
-        private PlayerHealth _playerHealth;
-        private AnimationManager _animationManager;
-        private PlayerEnvironmentChecker _playerEnvironmentChecker;
-        
         [SerializeField] private Transform feetPosition;
         [SerializeField] private Vector2 sizeCapsule;
         [SerializeField] private LayerMask walkLayers;
@@ -24,12 +19,19 @@ namespace Player
         [SerializeField] private int lives;
         [SerializeField] private int scoreOnDamage;
         [SerializeField] private float howTimeToNextAttack;
-        [SerializeField] private float howTimeToNextJump;
         [SerializeField] private float escJumpSpeed;
         [SerializeField] private float delayJumpTime;
+        [SerializeField] private float jumpByKnockBack = 1f;
+        [SerializeField] private Image imageAttackBar;
+        [SerializeField] private Image imageJumpBar;
         
-        protected Dictionary<int, string> Awards;
-        
+        private PlayerMovement _playerMovement;
+        private PlayerHealth _playerHealth;
+        private AnimationManager _animationManager;
+        private PlayerEnvironmentChecker _playerEnvironmentChecker;
+        private SpriteRenderer _spriteRenderer;
+        private AwardManager _awardManager;
+        private Rigidbody2D _rigidbody2D;
         private bool _jump;
         private bool _jumpUI;
         private float _horizontal;
@@ -39,11 +41,15 @@ namespace Player
         private bool _attack;
         private bool _attackUI;
         private float _timerToNextAttack;
-        private float _timerToNextJump;
-        private SpriteRenderer _spriteRenderer;
         private bool _isInvulnerable;
-        private AwardManager _awardManager;
-        private Rigidbody2D _rigidbody2D;
+        private bool _isKnockBack;
+        private float _countJump;
+        private bool _isGrounded;
+        private bool _isDelayTouchGround;
+        private bool _canJump;
+        private bool _blockJump;
+
+        protected Dictionary<int, string> Awards;
 
         public abstract void AttackFromPlayer();
 
@@ -55,15 +61,16 @@ namespace Player
             _animationManager = new AnimationManager(GetComponent<Animator>());
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _playerMovement = new PlayerMovement(this, escJumpSpeed, _animationManager, _rigidbody2D, _spriteRenderer, howTimeToNextJump);
+            _playerMovement = new PlayerMovement(this, escJumpSpeed, _animationManager, _rigidbody2D, _spriteRenderer);
             _playerHealth = new PlayerHealth(lives, scoreOnDamage);
         }
 
         protected void Start()
         {
             ManageRespawnStart();
-            ManageHudControlStart();
-            _awardManager = new AwardManager(Awards, _hudControl);
+            ManageCanJump();
+            HudControl.StaticHudControl.SetPlayerLivesInHud(lives);
+            _awardManager = new AwardManager(Awards);
         }
 
         private void Update()
@@ -73,29 +80,20 @@ namespace Player
 
         private void FixedUpdate()
         {
-            var isGrounded = _playerEnvironmentChecker.CheckIsGrounded();
+            SetIsGrounded(_playerEnvironmentChecker.CheckIsGrounded());
+            SetIsDelayTouchGround(_playerEnvironmentChecker.CheckIsDelayTouchGround());
             
-            ManageMovement(isGrounded);
+            ManageMovement();
 
             ManageAttack();
 
-            ManageJump(isGrounded);
+            ManageJump();
         }
         
         private void ManagePlayerLivesOnAwake()
         {
             lives = PlayerPrefs.GetInt("PlayerLives", 0) > 0 ? PlayerPrefs.GetInt("PlayerLives", 0) : lives;
             lives = lives <= 5 ? lives : lives <= 0 ? 1 : 5; // para garantir que não vai ter mais que 5 e nem nascer morto
-        }
-
-        private void ManageHudControlStart()
-        {
-            _hudControl = HudControl.StaticHudControl;
-
-            if (_hudControl)
-            {
-                _hudControl.SetPlayerLivesInHud(lives);
-            }
         }
 
         private void ManageRespawnStart()
@@ -113,7 +111,7 @@ namespace Player
             // vertical = Input.GetAxis("Vertical");
         }
 
-        private void ManageMovement(bool isGrounded)
+        private void ManageMovement()
         {
             if (_horizontal != 0 || _vertical != 0)
             {
@@ -122,39 +120,48 @@ namespace Player
             }
             else
             {
-                if (isGrounded && !_jump)
+                if (!_isKnockBack)
                 {
-                    _playerMovement.DontMove();
+                    if (_isGrounded && !_jump)
+                    {
+                        _playerMovement.DontMove();
+                    }
+                }
+                else
+                {
+                    _isKnockBack = false;
                 }
                 
                 _animationManager.StopMove();
             }
         }
 
-        private void ManageJump(bool isGrounded)
+        private void ManageJump()
         {
-            ManageJumpActions(isGrounded);
+            ManageJumpActions();
             
-            _playerMovement.ManageJumpTimer(isGrounded);
-            
-            _animationManager.ManageJumpAnimations(isGrounded, _rigidbody2D.velocity.y);
+            _animationManager.ManageJumpAnimations(_isGrounded, _rigidbody2D.velocity.y);
         }
 
-        private void ManageJumpActions(bool isGrounded)
+        private void ManageJumpActions()
         {
-            var isDelayTouchGround = _playerEnvironmentChecker.CheckIsDelayTouchGround();
-            
             if (_jump)
             {
-                _playerMovement.Jump(jumpForce, isDelayTouchGround, isGrounded);
+                if (_canJump)
+                {
+                    _playerMovement.Jump(jumpForce);
+                }
             }
             else
             {
-                if (!isGrounded)
+                if (!_isGrounded)
                 {
                     _playerMovement.EscJump();
                 }
             }
+            
+            var percent = CalculatePercentToNextJump();
+            HudControl.StaticHudControl.UpdateImageSize(percent, imageJumpBar);
         }
 
         private void ManageAttack()
@@ -182,13 +189,28 @@ namespace Player
 
                 var calculatePercent = CalculatePercentToNextAttack();
 
-                if (_hudControl)
-                {
-                    _hudControl.UpdateImageAttackSize(calculatePercent);
-                }
+                HudControl.StaticHudControl.UpdateImageSize(calculatePercent, imageAttackBar);
             }
         }
 
+        private float CalculatePercentToNextJump()
+        {
+            if (!_canJump)
+            {
+                _countJump = 0;
+                return 0;
+            }
+
+            if (_countJump > 100)
+            {
+                _countJump = 100;
+            }
+
+            _countJump += Time.deltaTime * 1000;
+            
+            return _countJump;
+        }
+        
         private float CalculatePercentToNextAttack()
         {
             _playerMovement.SetTimerToNextAttack(_timerToNextAttack);
@@ -206,16 +228,24 @@ namespace Player
             return calculatePercent;
         }
 
-        public void TakeDamage(int damage)
+        public void TakeDamage(int damage, float knockBackForce, Vector2 direction)
         {
             if (!_isInvulnerable)
             {
                 var newLives = _playerHealth.TakeDamage(damage);
-                _hudControl.SetPlayerLivesInHud(newLives);
+                
+                _playerMovement.KnockBack(knockBackForce, direction, jumpByKnockBack);
+                _isKnockBack = true;
+                
+                HudControl.StaticHudControl.SetPlayerLivesInHud(newLives);
 
                 if (newLives > 0)
                 {
-                    StartCoroutine(Damage());
+                    StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(Damage()));
+                }
+                else
+                {
+                    _playerHealth.GameOver();
                 }
             }
         }
@@ -238,10 +268,37 @@ namespace Player
             _isInvulnerable = false;
         }
 
+        public bool GetIsInvulnerable()
+        {
+            return _isInvulnerable;
+        }
+        
+        private void SetIsGrounded(bool value)
+        {
+            _isGrounded = value;
+            ManageCanJump();
+        }
+
+        private void SetIsDelayTouchGround(bool value)
+        {
+            _isDelayTouchGround = value;
+            ManageCanJump();
+        }
+
+        public void SetBlockJump(bool value)
+        {
+            _blockJump = value;
+            ManageCanJump();
+        }
+
+        private void ManageCanJump()
+        {
+            _canJump = (_isGrounded || _isDelayTouchGround) && !_blockJump;
+        }
+        
         public void GameOver()
         {
             _playerHealth.GameOver();
-            _hudControl.SetPlayerLivesInHud(0);
         }
 
         public void MoveRight()
@@ -293,5 +350,6 @@ namespace Player
         {
             _playerEnvironmentChecker.OnDrawGizmosSelected();
         }
+
     }
 }

@@ -1,5 +1,5 @@
 using System.Collections;
-using Player;
+using Player.Attacks;
 using UI;
 using UnityEngine;
 
@@ -20,30 +20,27 @@ namespace Enemies
             var attackPosition = new Vector3(transform.position.x + 0.5f, transform.position.y - 0.1f, transform.position.z);
             
             var newAttack = Instantiate(attack, attackPosition, Quaternion.identity);
-            var script = newAttack.GetComponent<Attack01>();
+            var script = newAttack.GetComponent<Attack>();
 
             script.Initialize(gameObject, attackVelocity, takeDamage);
         }
 
-        protected override void Defeated()
+        protected override void Defeated(float knockBackForce)
         {
             PlayerPrefs.SetInt(Library.PlayerPrefsPurchasedCharacter + Library.RenanBatista, 1);
             PlayerPrefs.SetInt(Library.PlayerPrefsComplete + Library.Level01, 1);
-            StartCoroutine(PlayBothCoroutines());
-        }
-        
-        private IEnumerator PlayBothCoroutines()
-        {
             var unlockedCharacter = PlayerPrefs.GetInt(Library.PlayerPrefsPurchasedCharacter + Library.RenanBatista, 0) == 1;
 
+            // StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(WaitKnockBack(knockBackForce)));
+            
             if (!unlockedCharacter)
             {
-                yield return StartCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite, null));
-                yield return StartCoroutine(HudControl.StaticHudControl.UnlockCharacterScene(ThisSprite, nextScene));
+                StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite, null)));
+                StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.UnlockCharacterScene(ThisSprite, nextScene)));
             }
             else
             {
-                yield return StartCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite, nextScene));
+                StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite, nextScene)));
             }
         }
     }

@@ -7,14 +7,17 @@ namespace Scene
     {
         public abstract void EndScene();
         
-        protected static void NextScene(string sceneName)
+        protected void NextScene(string sceneName)
         {
+            StopAllCoroutines();
             // SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().name);
+            GameControl.ResetRespawnPoints();
             SceneManager.LoadScene(sceneName);
         }
 
-        protected static void PreviousScene(string sceneName)
+        protected void PreviousScene(string sceneName)
         {
+            StopAllCoroutines();
             SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().name);
             SceneManager.LoadScene(sceneName);
         }
