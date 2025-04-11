@@ -177,7 +177,7 @@ namespace Enemies
 
         protected virtual void Defeated(float knockBackForce)
         {
-            // StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(WaitKnockBack(knockBackForce)));
+            // StartCoroutine(WaitKnockBack(knockBackForce)));
             Destroy(gameObject);
         }
 

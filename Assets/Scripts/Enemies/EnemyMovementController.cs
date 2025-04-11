@@ -45,7 +45,7 @@ namespace Enemies
             var currentSpeed = _isInVision ? _chaseSpeed : _moveSpeed;
             
             SetDirection(direction);
-            _rigidbody2D.velocity = new Vector2(direction * currentSpeed, _rigidbody2D.velocity.y);
+            _rigidbody2D.linearVelocity = new Vector2(direction * currentSpeed, _rigidbody2D.linearVelocity.y);
             _animationManager.Move();
         }
 
@@ -53,7 +53,7 @@ namespace Enemies
         {
             if (!_animationManager.GetBoolAnimator(Library.IsFalling))
             {
-                _rigidbody2D.velocity = new Vector2(0, 0);
+                _rigidbody2D.linearVelocity = new Vector2(0, 0);
             }
     
             _animationManager.StopMove();
@@ -61,7 +61,7 @@ namespace Enemies
 
         public void Jump()
         {
-            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpForce);
+            _rigidbody2D.linearVelocity = new Vector2(_rigidbody2D.linearVelocity.x, _jumpForce);
         }
         
         public void FlipDirection()
@@ -69,7 +69,7 @@ namespace Enemies
             SetDirection(_direction *= -1);
 
             // 🔥 Impede que ele ande imediatamente após virar
-            _rigidbody2D.velocity = Vector2.zero; // Para o movimento
+            _rigidbody2D.linearVelocity = Vector2.zero; // Para o movimento
         }
 
         public void FlipToPlayer()
@@ -90,7 +90,7 @@ namespace Enemies
         
         private void UpdateSpriteDirection()
         {
-            _spriteRenderer.flipX = _direction == -1;
+            _spriteRenderer.flipX = _direction == 1;
             _collider2D.offset = _spriteRenderer.flipX ? _colliderDefault : _colliderFlip;
         }
 

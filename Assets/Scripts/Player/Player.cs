@@ -4,7 +4,7 @@ using Resources;
 using Respawn;
 using UI;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace Player
 {
@@ -140,7 +140,7 @@ namespace Player
         {
             ManageJumpActions();
             
-            _animationManager.ManageJumpAnimations(_isGrounded, _rigidbody2D.velocity.y);
+            _animationManager.ManageJumpAnimations(_isGrounded, _rigidbody2D.linearVelocity.y);
         }
 
         private void ManageJumpActions()
@@ -241,7 +241,7 @@ namespace Player
 
                 if (newLives > 0)
                 {
-                    StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(Damage()));
+                    StartCoroutine(Damage());
                 }
                 else
                 {

@@ -1,6 +1,6 @@
 using Player.Attacks;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace Enemies
 {
@@ -16,7 +16,7 @@ namespace Enemies
             script.Initialize(gameObject, attackVelocity, takeDamage);
         }
         
-        [SerializeField] private Image rageImage;
+        [SerializeField] private IResolvedStyle rageImage;
 
         [Header("Comportamento")]
         [SerializeField] private LayerMask playerLayer;
@@ -35,7 +35,7 @@ namespace Enemies
 
         private new void Update()
         {
-            if (rageImage)
+            if (rageImage != null)
             {
                 var color = IsInVision ? new Color(rageImage.color.r, rageImage.color.g, rageImage.color.b, 0.5f) : new Color(rageImage.color.r, rageImage.color.g, rageImage.color.b, 0f);
                 UpdateRageImage(color);
@@ -46,7 +46,7 @@ namespace Enemies
         {
             base.FixedUpdate();
             MakeDecision();
-            AnimationManager.ManageJumpAnimations(IsGrounded, Rigidbody2D.velocity.y);
+            AnimationManager.ManageJumpAnimations(IsGrounded, Rigidbody2D.linearVelocity.y);
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
@@ -78,7 +78,7 @@ namespace Enemies
 
         private void UpdateRageImage(Color color)
         {
-            rageImage.color = color;
+            // rageImage.color = color;
         }
     }
 }

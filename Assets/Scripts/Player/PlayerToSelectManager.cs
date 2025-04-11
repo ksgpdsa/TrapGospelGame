@@ -36,8 +36,7 @@ namespace Player
             {
                 buttonChoiceCharacter.SetActive(false);
                 buttonPurchase.SetActive(true);
-                valor.enabled = true;
-                
+                // valor.enabled = true;
             }
         }
     }

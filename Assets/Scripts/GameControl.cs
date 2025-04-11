@@ -58,14 +58,14 @@ public class GameControl : MonoBehaviour
 
     public void AddScore(int score)
     {
-        StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.ShowNewScore(score.ToString())));
+        StartCoroutine(HudControl.StaticHudControl.ShowNewScore(score.ToString()));
         _score += score;
         HudControl.StaticHudControl.UpdateScoreText(_score);
     }
     
     public void RemoveScore(int score)
     {
-        StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.ShowNewScore("- " + score)));
+        StartCoroutine(HudControl.StaticHudControl.ShowNewScore("- " + score));
             
         _score -= score;
 
@@ -84,13 +84,7 @@ public class GameControl : MonoBehaviour
 
     private void ReopenLevel()
     {
-        StartCoroutine(CoroutineReopenLevel());
-    }
-
-    private IEnumerator CoroutineReopenLevel()
-    {
-        yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.WaitForAll());
-        
+        StopAllCoroutines();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -127,18 +121,18 @@ public class GameControl : MonoBehaviour
 
     public void BackToMainMenu()
     {
-        StartCoroutine(CoroutineManager.StaticCoroutineManager.WaitForAll());
+        StopAllCoroutines();
         SceneManager.LoadScene(Library.Menu);
     }
     
     public void GameOver()
     {
-        StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(GameOverRoutine()));
+        StartCoroutine(GameOverRoutine());
     }
     
     private IEnumerator GameOverRoutine()
     {
-        yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.MessageGameOver()));
+        yield return StartCoroutine(HudControl.StaticHudControl.MessageGameOver());
 
         SaveScore(_score, _levelName);
         ReopenLevel();

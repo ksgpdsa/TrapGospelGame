@@ -27,8 +27,8 @@ namespace Enemies
 
         protected override void Defeated(float knockBackForce)
         {
-            // StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(WaitKnockBack(knockBackForce)));
-            StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite,nextScene)));
+            // StartCoroutine(WaitKnockBack(knockBackForce)));
+            StartCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite,nextScene));
         }
     }
 }

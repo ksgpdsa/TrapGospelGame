@@ -27,7 +27,7 @@ namespace Player.Attacks
         private void AttackTrajectory()
         {
             var direction = !_spriteAttack.flipX ? Vector3.right : Vector3.left;
-            _rigidBodyAttack.velocity = direction * AttackVelocity;
+            _rigidBodyAttack.linearVelocity = direction * AttackVelocity;
         }
     }
 }

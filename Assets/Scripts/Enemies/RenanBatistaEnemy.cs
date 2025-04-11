@@ -31,16 +31,16 @@ namespace Enemies
             PlayerPrefs.SetInt(Library.PlayerPrefsComplete + Library.Level01, 1);
             var unlockedCharacter = PlayerPrefs.GetInt(Library.PlayerPrefsPurchasedCharacter + Library.RenanBatista, 0) == 1;
 
-            // StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(WaitKnockBack(knockBackForce)));
+            // StartCoroutine(WaitKnockBack(knockBackForce)));
             
             if (!unlockedCharacter)
             {
-                StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite, null)));
-                StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.UnlockCharacterScene(ThisSprite, nextScene)));
+                StartCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite, null));
+                StartCoroutine(HudControl.StaticHudControl.UnlockCharacterScene(ThisSprite, nextScene));
             }
             else
             {
-                StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite, nextScene)));
+                StartCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite, nextScene));
             }
         }
     }

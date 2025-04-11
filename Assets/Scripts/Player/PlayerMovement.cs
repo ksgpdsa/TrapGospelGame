@@ -21,7 +21,7 @@ namespace Player
             _spriteRenderer = spriteRenderer;
             _escJumpSpeed = escJumpSpeed;
 
-            _rigidbody2D.velocity = Vector2.zero;
+            _rigidbody2D.linearVelocity = Vector2.zero;
         }
         
         public void Jump(float jumpForce)
@@ -31,9 +31,9 @@ namespace Player
 
         public void EscJump()
         {
-            if (_rigidbody2D.velocity.y > 0.5)
+            if (_rigidbody2D.linearVelocity.y > 0.5)
             {
-                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _rigidbody2D.velocity.y * _escJumpSpeed);
+                _rigidbody2D.linearVelocity = new Vector2(_rigidbody2D.linearVelocity.x, _rigidbody2D.linearVelocity.y * _escJumpSpeed);
             }
         }
 
@@ -41,10 +41,10 @@ namespace Player
         {
             _spriteRenderer.flipX = horizontal == 0 ? _spriteRenderer.flipX : horizontal < 0;
 
-            horizontal = horizontal == 0 ? _rigidbody2D.velocity.x : horizontal;
-            vertical = vertical == 0 ? _rigidbody2D.velocity.y : vertical;
+            horizontal = horizontal == 0 ? _rigidbody2D.linearVelocity.x : horizontal;
+            vertical = vertical == 0 ? _rigidbody2D.linearVelocity.y : vertical;
             
-            _rigidbody2D.velocity = new Vector2(horizontal, vertical);
+            _rigidbody2D.linearVelocity = new Vector2(horizontal, vertical);
         }
         
         public float Attack()
@@ -72,7 +72,7 @@ namespace Player
         {
             if (!_animationManager.GetBoolAnimator(Library.IsFalling))
             {
-                _rigidbody2D.velocity = new Vector2(0, 0);
+                _rigidbody2D.linearVelocity = new Vector2(0, 0);
             }
         }
     }

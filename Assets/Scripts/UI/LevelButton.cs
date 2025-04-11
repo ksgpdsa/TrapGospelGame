@@ -13,7 +13,7 @@ namespace UI
             {
                 var button = gameObject.GetComponent<Button>();
                 
-                button.interactable = true;
+                button.enabled = true;
             }
         }
     }

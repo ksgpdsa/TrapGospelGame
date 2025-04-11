@@ -5,7 +5,6 @@ namespace Scenario
 {
     public class ScrollComponent : MonoBehaviour
     {
-        [SerializeField] private GameObject cameraPlayer; 
         [SerializeField] private float scrollSpeed;
         [SerializeField] private int numberTiles;
         
@@ -15,6 +14,7 @@ namespace Scenario
         private void Start()
         {
             _lenght = GetComponent<TilemapRenderer>().bounds.size.x;
+            var cameraPlayer = FindFirstObjectByType<UnityEngine.Camera>();
             _screenStart = cameraPlayer.transform.position.x - _lenght;
         }
     

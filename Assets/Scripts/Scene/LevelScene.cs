@@ -1,6 +1,7 @@
 using Character;
 using Respawn;
 using UI;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Scene
@@ -22,7 +23,7 @@ namespace Scene
             GameControl.StaticGameControl.SetLevelName(sceneLevelName); 
             GameControl.StaticGameControl.SetLevelTime(timeLevel);
             SpawnPlayer();
-            StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(HudControl.StaticHudControl.NewLevelScene(sceneLevelName, levelIcon)));
+            StartCoroutine(HudControl.StaticHudControl.NewLevelScene(sceneLevelName, levelIcon));
         }
         
         private void SpawnPlayer()
@@ -36,7 +37,14 @@ namespace Scene
             if (respawnPoint != null && characterDatabase.CharacterCount > selectedCharacter &&
                 (levelName == "Level01" || PlayerPrefs.GetInt(Library.PlayerPrefsComplete + levelName, 0) != 0) // libera só se tiver o Level liberado ou se for o Level01
             ) {
-                Instantiate(player, respawnPoint.transform.position, Quaternion.identity);
+                var instantiatePlayer = Instantiate(player, respawnPoint.transform.position, Quaternion.identity);
+
+                var virtualCam = FindFirstObjectByType<CinemachineCamera>();
+                if (virtualCam != null && instantiatePlayer != null)
+                {
+                    virtualCam.Follow = instantiatePlayer.transform;
+                    virtualCam.LookAt = instantiatePlayer.transform;
+                }
             }
             else
             {

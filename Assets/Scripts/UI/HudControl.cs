@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace UI
 {
@@ -53,15 +53,15 @@ namespace UI
 
         private void Start()
         {
-            originalColor = textScore.color;
+            // originalColor = textScore.color;
             originalColor.a = 0; // Começa invisível
-            textScore.color = originalColor;
+            // textScore.color = originalColor;
             originalScale = textScore.transform.localScale;
         }
 
         public void UpdateImageSize(float percentSize, Image imageBar)
         {
-            imageBar.fillAmount = percentSize / 100;
+            // imageBar.fillAmount = percentSize / 100;
         }
 
         public void ShowAward(string awardName, int score)
@@ -76,7 +76,7 @@ namespace UI
                 {
                     var message = awardName + " coletado !";
 
-                    StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(ShowMessage(message, sprite, null)));
+                    StartCoroutine(ShowMessage(message, sprite, null));
                     
                     GameControl.StaticGameControl.AddScore(score);
                 }
@@ -100,19 +100,19 @@ namespace UI
 
         public IEnumerator ShowNewScore(string newScore)
         {
-            textScore.text = newScore;
-            textScore.enabled = true;
-            yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(FadeAndJump(1f))); // Fade In + Jump
+            // textScore.text = newScore;
+            // textScore.enabled = true;
+            yield return StartCoroutine(FadeAndJump(1f)); // Fade In + Jump
             yield return new WaitForSeconds(showDuration); // Espera
-            yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(FadeAndJump(0f))); // Fade Out
-            textScore.enabled = false;
-            textScore.text = "";
+            yield return StartCoroutine(FadeAndJump(0f)); // Fade Out
+            // textScore.enabled = false;
+            // textScore.text = "";
         }
         
         private IEnumerator FadeAndJump(float targetAlpha)
         {
             var elapsedTime = 0f;
-            var startAlpha = textScore.color.a;
+            // var startAlpha = textScore.color.a;
             var startScale = textScore.transform.localScale;
             var targetScale = Mathf.Approximately(targetAlpha, 1f) ? originalScale * jumpScale : originalScale;
 
@@ -122,9 +122,9 @@ namespace UI
                 var t = elapsedTime / fadeDuration;
 
                 // Interpolação do Alpha
-                var newColor = textScore.color;
-                newColor.a = Mathf.Lerp(startAlpha, targetAlpha, t);
-                textScore.color = newColor;
+                // var newColor = textScore.color;
+                // newColor.a = Mathf.Lerp(startAlpha, targetAlpha, t);
+                // textScore.color = newColor;
 
                 // Interpolação do Scale (efeito de pulo)
                 textScore.transform.localScale = Vector3.Lerp(startScale, targetScale, t);
@@ -135,47 +135,48 @@ namespace UI
 
         public void UpdateScoreText(int score)
         {
-            hudScore.text = "Score: " + score;
+            // hudScore.text = "Score: " + score;
         }
 
         public void UpdateTimeText(float timeLevel)
         {
-            hudTime.text = Mathf.CeilToInt(timeLevel).ToString();
+            // hudTime.text = Mathf.CeilToInt(timeLevel).ToString();
         }
 
         public IEnumerator MessageGameOver()
         {
-            yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(ShowMessage("Game Over", iconGameOver, null)));
+            yield return StartCoroutine(ShowMessage("Game Over", iconGameOver, null));
         }
         
         public IEnumerator NewLevelScene(string sceneName, Sprite levelIcon)
         {
-            yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(ShowMessage(sceneName, levelIcon, null)));
+            yield return StartCoroutine(ShowMessage(sceneName, levelIcon, null));
         }
         
         public IEnumerator DefeatScene(Sprite iconDefeatEnemy, [CanBeNull] string nextSceneName)
         {
-            yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(ShowMessage("Eliminado", iconDefeatEnemy, nextSceneName)));
+            yield return StartCoroutine(ShowMessage("Eliminado", iconDefeatEnemy, nextSceneName));
         }
         
         public IEnumerator UnlockCharacterScene(Sprite iconDefeatEnemy, [CanBeNull] string nextSceneName)
         {
-            yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(ShowMessage("Personagem Desbloqueado", iconDefeatEnemy, nextSceneName)));
+            yield return StartCoroutine(ShowMessage("Personagem Desbloqueado", iconDefeatEnemy, nextSceneName));
         }
 
         private IEnumerator ShowMessage(string message, [CanBeNull] Sprite icon, [CanBeNull] string nextSceneName)
         {
-            itemText.text = message;
+            // itemText.text = message;
             itemImage.sprite = icon;
             itemPanel.SetActive(true);
             
+            
             Time.timeScale = 0f;
             
-            yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(FadeIn(canvasItemGroup)));
+            yield return StartCoroutine(FadeIn(canvasItemGroup));
 
             yield return new WaitForSecondsRealtime(2f);
 
-            yield return StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(FadeOut(canvasItemGroup)));
+            yield return StartCoroutine(FadeOut(canvasItemGroup));
  
             itemPanel.SetActive(false);
             

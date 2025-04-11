@@ -15,7 +15,7 @@ namespace Enemies
         {
             base.Initialize(owner, arrowVelocity, damage);
             _arrowVelocity = arrowVelocity;
-            flipX = !owner.GetComponent<SpriteRenderer>().flipX;
+            flipX = owner.GetComponent<SpriteRenderer>().flipX;
         }
         
         private void Start()
@@ -40,8 +40,8 @@ namespace Enemies
             var rotationAngle = _spriteArrow.flipX ? 45f : -45f;
             transform.rotation = Quaternion.Euler(0, 0, rotationAngle);
             
-            _rigidbodyArrow.velocity = direction * _arrowVelocity;
-            StartCoroutine(CoroutineManager.StaticCoroutineManager.RunCoroutine(RotateArrow(_spriteArrow.flipX ? 45f : -45f, 1f)));
+            _rigidbodyArrow.linearVelocity = direction * _arrowVelocity;
+            StartCoroutine(RotateArrow(_spriteArrow.flipX ? 45f : -45f, 1f));
         }
 
         private IEnumerator RotateArrow(float targetAngle, float duration)

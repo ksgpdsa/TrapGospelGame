@@ -1,141 +1,405 @@
 fileFormatVersion: 2
 guid: 4d4fec82845aa644888f07cc7cf6e2b9
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: ground_sky_0
-    21300002: ground_sky_1
-    21300004: ground_sky_2
-    21300006: ground_sky_3
-    21300008: ground_sky_4
-    21300010: ground_sky_5
-    21300012: ground_sky_6
-    21300014: ground_sky_7
-    21300016: ground_sky_8
-    21300018: ground_sky_9
-    21300020: ground_sky_10
-    21300022: ground_sky_11
-    21300024: ground_sky_12
-    21300026: ground_sky_13
-    21300028: ground_sky_14
-    21300030: ground_sky_15
-    21300032: ground_sky_16
-    21300034: ground_sky_17
-    21300036: ground_sky_18
-    21300038: ground_sky_19
-    21300040: ground_sky_20
-    21300042: ground_sky_21
-    21300044: ground_sky_22
-    21300046: ground_sky_23
-    21300048: ground_sky_24
-    21300050: ground_sky_25
-    21300052: ground_sky_26
-    21300054: ground_sky_27
-    21300056: ground_sky_28
-    21300058: ground_sky_29
-    21300060: ground_sky_30
-    21300062: ground_sky_31
-    21300064: ground_sky_32
-    21300066: ground_sky_33
-    21300068: ground_sky_34
-    21300070: ground_sky_35
-    21300072: ground_sky_36
-    21300074: ground_sky_37
-    21300076: ground_sky_38
-    21300078: ground_sky_39
-    21300080: ground_sky_40
-    21300082: ground_sky_41
-    21300084: ground_sky_42
-    21300086: ground_sky_43
-    21300088: ground_sky_44
-    21300090: ground_sky_45
-    21300092: ground_sky_46
-    21300094: ground_sky_47
-    21300096: ground_sky_48
-    21300098: ground_sky_49
-    21300100: ground_sky_50
-    21300102: ground_sky_51
-    21300104: ground_sky_52
-    21300106: ground_sky_53
-    21300108: ground_sky_54
-    21300110: ground_sky_55
-    21300112: ground_sky_56
-    21300114: ground_sky_57
-    21300116: ground_sky_58
-    21300118: ground_sky_59
-    21300120: ground_sky_60
-    21300122: ground_sky_61
-    21300124: ground_sky_62
-    21300126: ground_sky_63
-    21300128: ground_sky_64
-    21300130: ground_sky_65
-    21300132: ground_sky_66
-    21300134: ground_sky_67
-    21300136: ground_sky_68
-    21300138: ground_sky_69
-    21300140: ground_sky_70
-    21300142: ground_sky_71
-    21300144: ground_sky_72
-    21300146: ground_sky_73
-    21300148: ground_sky_74
-    21300150: ground_sky_75
-    21300152: ground_sky_76
-    21300154: ground_sky_77
-    21300156: ground_sky_78
-    21300158: ground_sky_79
-    21300160: ground_sky_80
-    21300162: ground_sky_81
-    21300164: ground_sky_82
-    21300166: ground_sky_83
-    21300168: ground_sky_84
-    21300170: ground_sky_85
-    21300172: ground_sky_86
-    21300174: ground_sky_87
-    21300176: ground_sky_88
-    21300178: ground_sky_89
-    21300180: ground_sky_90
-    21300182: ground_sky_91
-    21300184: ground_sky_92
-    21300186: ground_sky_93
-    21300188: ground_sky_94
-    21300190: ground_sky_95
-    21300192: ground_sky_96
-    21300194: ground_sky_97
-    21300196: ground_sky_98
-    21300198: ground_sky_99
-    21300200: ground_sky_100
-    21300202: ground_sky_101
-    21300204: ground_sky_102
-    21300206: ground_sky_103
-    21300208: ground_sky_104
-    21300210: ground_sky_105
-    21300212: ground_sky_106
-    21300214: ground_sky_107
-    21300216: ground_sky_108
-    21300218: ground_sky_109
-    21300220: ground_sky_110
-    21300222: ground_sky_111
-    21300224: ground_sky_112
-    21300226: ground_sky_113
-    21300228: ground_sky_114
-    21300230: ground_sky_115
-    21300232: ground_sky_116
-    21300234: ground_sky_117
-    21300236: ground_sky_118
-    21300238: ground_sky_119
-    21300240: ground_sky_120
-    21300242: ground_sky_121
-    21300244: ground_sky_122
-    21300246: ground_sky_123
-    21300248: ground_sky_124
-    21300250: ground_sky_125
-    21300252: ground_sky_126
-    21300254: ground_sky_127
-    21300256: ground_sky_128
-    21300258: ground_sky_129
-    21300260: ground_sky_130
-    21300262: ground_sky_131
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: ground_sky_0
+  - first:
+      213: 21300002
+    second: ground_sky_1
+  - first:
+      213: 21300004
+    second: ground_sky_2
+  - first:
+      213: 21300006
+    second: ground_sky_3
+  - first:
+      213: 21300008
+    second: ground_sky_4
+  - first:
+      213: 21300010
+    second: ground_sky_5
+  - first:
+      213: 21300012
+    second: ground_sky_6
+  - first:
+      213: 21300014
+    second: ground_sky_7
+  - first:
+      213: 21300016
+    second: ground_sky_8
+  - first:
+      213: 21300018
+    second: ground_sky_9
+  - first:
+      213: 21300020
+    second: ground_sky_10
+  - first:
+      213: 21300022
+    second: ground_sky_11
+  - first:
+      213: 21300024
+    second: ground_sky_12
+  - first:
+      213: 21300026
+    second: ground_sky_13
+  - first:
+      213: 21300028
+    second: ground_sky_14
+  - first:
+      213: 21300030
+    second: ground_sky_15
+  - first:
+      213: 21300032
+    second: ground_sky_16
+  - first:
+      213: 21300034
+    second: ground_sky_17
+  - first:
+      213: 21300036
+    second: ground_sky_18
+  - first:
+      213: 21300038
+    second: ground_sky_19
+  - first:
+      213: 21300040
+    second: ground_sky_20
+  - first:
+      213: 21300042
+    second: ground_sky_21
+  - first:
+      213: 21300044
+    second: ground_sky_22
+  - first:
+      213: 21300046
+    second: ground_sky_23
+  - first:
+      213: 21300048
+    second: ground_sky_24
+  - first:
+      213: 21300050
+    second: ground_sky_25
+  - first:
+      213: 21300052
+    second: ground_sky_26
+  - first:
+      213: 21300054
+    second: ground_sky_27
+  - first:
+      213: 21300056
+    second: ground_sky_28
+  - first:
+      213: 21300058
+    second: ground_sky_29
+  - first:
+      213: 21300060
+    second: ground_sky_30
+  - first:
+      213: 21300062
+    second: ground_sky_31
+  - first:
+      213: 21300064
+    second: ground_sky_32
+  - first:
+      213: 21300066
+    second: ground_sky_33
+  - first:
+      213: 21300068
+    second: ground_sky_34
+  - first:
+      213: 21300070
+    second: ground_sky_35
+  - first:
+      213: 21300072
+    second: ground_sky_36
+  - first:
+      213: 21300074
+    second: ground_sky_37
+  - first:
+      213: 21300076
+    second: ground_sky_38
+  - first:
+      213: 21300078
+    second: ground_sky_39
+  - first:
+      213: 21300080
+    second: ground_sky_40
+  - first:
+      213: 21300082
+    second: ground_sky_41
+  - first:
+      213: 21300084
+    second: ground_sky_42
+  - first:
+      213: 21300086
+    second: ground_sky_43
+  - first:
+      213: 21300088
+    second: ground_sky_44
+  - first:
+      213: 21300090
+    second: ground_sky_45
+  - first:
+      213: 21300092
+    second: ground_sky_46
+  - first:
+      213: 21300094
+    second: ground_sky_47
+  - first:
+      213: 21300096
+    second: ground_sky_48
+  - first:
+      213: 21300098
+    second: ground_sky_49
+  - first:
+      213: 21300100
+    second: ground_sky_50
+  - first:
+      213: 21300102
+    second: ground_sky_51
+  - first:
+      213: 21300104
+    second: ground_sky_52
+  - first:
+      213: 21300106
+    second: ground_sky_53
+  - first:
+      213: 21300108
+    second: ground_sky_54
+  - first:
+      213: 21300110
+    second: ground_sky_55
+  - first:
+      213: 21300112
+    second: ground_sky_56
+  - first:
+      213: 21300114
+    second: ground_sky_57
+  - first:
+      213: 21300116
+    second: ground_sky_58
+  - first:
+      213: 21300118
+    second: ground_sky_59
+  - first:
+      213: 21300120
+    second: ground_sky_60
+  - first:
+      213: 21300122
+    second: ground_sky_61
+  - first:
+      213: 21300124
+    second: ground_sky_62
+  - first:
+      213: 21300126
+    second: ground_sky_63
+  - first:
+      213: 21300128
+    second: ground_sky_64
+  - first:
+      213: 21300130
+    second: ground_sky_65
+  - first:
+      213: 21300132
+    second: ground_sky_66
+  - first:
+      213: 21300134
+    second: ground_sky_67
+  - first:
+      213: 21300136
+    second: ground_sky_68
+  - first:
+      213: 21300138
+    second: ground_sky_69
+  - first:
+      213: 21300140
+    second: ground_sky_70
+  - first:
+      213: 21300142
+    second: ground_sky_71
+  - first:
+      213: 21300144
+    second: ground_sky_72
+  - first:
+      213: 21300146
+    second: ground_sky_73
+  - first:
+      213: 21300148
+    second: ground_sky_74
+  - first:
+      213: 21300150
+    second: ground_sky_75
+  - first:
+      213: 21300152
+    second: ground_sky_76
+  - first:
+      213: 21300154
+    second: ground_sky_77
+  - first:
+      213: 21300156
+    second: ground_sky_78
+  - first:
+      213: 21300158
+    second: ground_sky_79
+  - first:
+      213: 21300160
+    second: ground_sky_80
+  - first:
+      213: 21300162
+    second: ground_sky_81
+  - first:
+      213: 21300164
+    second: ground_sky_82
+  - first:
+      213: 21300166
+    second: ground_sky_83
+  - first:
+      213: 21300168
+    second: ground_sky_84
+  - first:
+      213: 21300170
+    second: ground_sky_85
+  - first:
+      213: 21300172
+    second: ground_sky_86
+  - first:
+      213: 21300174
+    second: ground_sky_87
+  - first:
+      213: 21300176
+    second: ground_sky_88
+  - first:
+      213: 21300178
+    second: ground_sky_89
+  - first:
+      213: 21300180
+    second: ground_sky_90
+  - first:
+      213: 21300182
+    second: ground_sky_91
+  - first:
+      213: 21300184
+    second: ground_sky_92
+  - first:
+      213: 21300186
+    second: ground_sky_93
+  - first:
+      213: 21300188
+    second: ground_sky_94
+  - first:
+      213: 21300190
+    second: ground_sky_95
+  - first:
+      213: 21300192
+    second: ground_sky_96
+  - first:
+      213: 21300194
+    second: ground_sky_97
+  - first:
+      213: 21300196
+    second: ground_sky_98
+  - first:
+      213: 21300198
+    second: ground_sky_99
+  - first:
+      213: 21300200
+    second: ground_sky_100
+  - first:
+      213: 21300202
+    second: ground_sky_101
+  - first:
+      213: 21300204
+    second: ground_sky_102
+  - first:
+      213: 21300206
+    second: ground_sky_103
+  - first:
+      213: 21300208
+    second: ground_sky_104
+  - first:
+      213: 21300210
+    second: ground_sky_105
+  - first:
+      213: 21300212
+    second: ground_sky_106
+  - first:
+      213: 21300214
+    second: ground_sky_107
+  - first:
+      213: 21300216
+    second: ground_sky_108
+  - first:
+      213: 21300218
+    second: ground_sky_109
+  - first:
+      213: 21300220
+    second: ground_sky_110
+  - first:
+      213: 21300222
+    second: ground_sky_111
+  - first:
+      213: 21300224
+    second: ground_sky_112
+  - first:
+      213: 21300226
+    second: ground_sky_113
+  - first:
+      213: 21300228
+    second: ground_sky_114
+  - first:
+      213: 21300230
+    second: ground_sky_115
+  - first:
+      213: 21300232
+    second: ground_sky_116
+  - first:
+      213: 21300234
+    second: ground_sky_117
+  - first:
+      213: 21300236
+    second: ground_sky_118
+  - first:
+      213: 21300238
+    second: ground_sky_119
+  - first:
+      213: 21300240
+    second: ground_sky_120
+  - first:
+      213: 21300242
+    second: ground_sky_121
+  - first:
+      213: 21300244
+    second: ground_sky_122
+  - first:
+      213: 21300246
+    second: ground_sky_123
+  - first:
+      213: 21300248
+    second: ground_sky_124
+  - first:
+      213: 21300250
+    second: ground_sky_125
+  - first:
+      213: 21300252
+    second: ground_sky_126
+  - first:
+      213: 21300254
+    second: ground_sky_127
+  - first:
+      213: 21300256
+    second: ground_sky_128
+  - first:
+      213: 21300258
+    second: ground_sky_129
+  - first:
+      213: 21300260
+    second: ground_sky_130
+  - first:
+      213: 21300262
+    second: ground_sky_131
   externalObjects: {}
-  serializedVersion: 9
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -152,9 +416,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -164,11 +431,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -186,11 +453,17 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -200,8 +473,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -211,7 +486,9 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -226,11 +503,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 47e9207f7db01ca4f9a0d125cfefa41e
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -246,11 +525,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 250825b59d04ecd46a280ac29c339d09
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
@@ -266,11 +547,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: a08880012c3990c4fa9da05808e13718
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -286,11 +569,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 7aa0e1a64d3466d43a50ab20733ab579
+      internalID: 21300006
       vertices: []
       indices: 
       edges: []
@@ -306,11 +591,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 87e72b126f11a4840b71a4b633815114
+      internalID: 21300008
       vertices: []
       indices: 
       edges: []
@@ -326,11 +613,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 9254934b628bed94eb6494fccfd660c9
+      internalID: 21300010
       vertices: []
       indices: 
       edges: []
@@ -346,11 +635,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 67ba8dfa0e9ad0342b27e27d5e9d9506
+      internalID: 21300012
       vertices: []
       indices: 
       edges: []
@@ -366,11 +657,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 974666f21df8360409de1ddd2e68da8f
+      internalID: 21300014
       vertices: []
       indices: 
       edges: []
@@ -386,26 +679,42 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: f275e5bcb14b944418d5dd43c1a43202
+      internalID: 21300016
       vertices: []
       indices: 
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 52d94dd692148154ea91a8c723a97f8d
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
-  spritePackingTag: 
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ground_sky_0: 21300000
+      ground_sky_1: 21300002
+      ground_sky_2: 21300004
+      ground_sky_3: 21300006
+      ground_sky_4: 21300008
+      ground_sky_5: 21300010
+      ground_sky_6: 21300012
+      ground_sky_7: 21300014
+      ground_sky_8: 21300016
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 
