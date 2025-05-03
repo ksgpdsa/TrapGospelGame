@@ -14,7 +14,7 @@ namespace Resources
         public void KnockBack(float force, Vector2 direction, float jumpByKnockBack)
         {
             direction.y += jumpByKnockBack;
-            
+
             _rigidbody2D.AddForce(direction * force, ForceMode2D.Impulse);
         }
     }

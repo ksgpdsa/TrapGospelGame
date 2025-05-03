@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Character
 {
-    [System.Serializable]
+    [Serializable]
     public class Character
     {
         public string name;

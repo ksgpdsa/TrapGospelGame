@@ -14,9 +14,7 @@ namespace Enemies
         public void StartLivesInHud()
         {
             if (HudControlEnemy.StaticHudControlEnemy != null)
-            {
                 HudControlEnemy.StaticHudControlEnemy.SetLivesInHud(_lives);
-            }
         }
 
         public int TakeDamage(int damage)
@@ -24,15 +22,10 @@ namespace Enemies
             _lives -= damage;
 
             if (HudControlEnemy.StaticHudControlEnemy != null)
-            {
                 HudControlEnemy.StaticHudControlEnemy.SetLivesInHud(_lives);
-            }
 
-            if (_lives <= 0)
-            {
-                Defeated();
-            }
-            
+            if (_lives <= 0) Defeated();
+
             return _lives;
         }
 

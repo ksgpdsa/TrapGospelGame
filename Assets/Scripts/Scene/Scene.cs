@@ -6,7 +6,7 @@ namespace Scene
     public abstract class Scene : MonoBehaviour
     {
         public abstract void EndScene();
-        
+
         protected void NextScene(string sceneName)
         {
             StopAllCoroutines();

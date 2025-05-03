@@ -7,7 +7,7 @@ public class MonetizationManager : MonoBehaviour
     {
         PlayerPrefs.SetInt(Library.PlayerPrefsPurchasedCharacter + Library.Ksbatista, 1);
     }
-    
+
     public void OnPurchaseComplete(Product product)
     {
         switch (product.definition.id)
@@ -15,12 +15,12 @@ public class MonetizationManager : MonoBehaviour
             case "characterrenanbatista":
                 PlayerPrefs.SetInt(Library.PlayerPrefsPurchasedCharacter + Library.RenanBatista, 1);
                 break;
-            
+
             case "charactert3rt":
                 PlayerPrefs.SetInt(Library.PlayerPrefsPurchasedCharacter + Library.T3rt, 1);
                 break;
         }
-        
+
         PlayerPrefs.Save();
     }
 }

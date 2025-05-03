@@ -4,13 +4,13 @@ namespace Resources
 {
     public class GroundCheck
     {
-        private readonly Transform _feetPosition;
-        private readonly Vector2 _sizeCapsule;
-        private readonly LayerMask _groundLayer;
         private readonly float _angleCapsule;
-        
-        private bool _isGrounded;
+        private readonly Transform _feetPosition;
+        private readonly LayerMask _groundLayer;
+        private readonly Vector2 _sizeCapsule;
         private float _delayJump;
+
+        private bool _isGrounded;
 
         public GroundCheck(Transform feetPosition, Vector2 sizeCapsule, LayerMask groundLayer, float angleCapsule)
         {
@@ -40,7 +40,8 @@ namespace Resources
 
         private void Update()
         {
-            _isGrounded = Physics2D.OverlapCapsule(_feetPosition.position, _sizeCapsule, CapsuleDirection2D.Horizontal, _angleCapsule, _groundLayer);
+            _isGrounded = Physics2D.OverlapCapsule(_feetPosition.position, _sizeCapsule, CapsuleDirection2D.Horizontal,
+                _angleCapsule, _groundLayer);
         }
 
         public void OnDrawGizmosSelected()

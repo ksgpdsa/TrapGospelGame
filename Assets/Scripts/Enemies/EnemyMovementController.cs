@@ -5,20 +5,21 @@ namespace Enemies
 {
     public class EnemyMovementController : Movement
     {
-        private readonly Transform _player;
-        private readonly Transform _enemy;
-        private readonly Rigidbody2D _rigidbody2D;
         private readonly AnimationManager _animationManager;
-        private readonly SpriteRenderer _spriteRenderer;
-        private readonly Collider2D _collider2D;
         private readonly float _chaseSpeed;
-        private readonly float _moveSpeed;
-        private readonly float _jumpForce;
+        private readonly Collider2D _collider2D;
         private readonly Vector2 _colliderDefault;
         private readonly Vector2 _colliderFlip;
-        
+        private readonly Transform _enemy;
+        private readonly float _jumpForce;
+        private readonly float _moveSpeed;
+        private readonly Transform _player;
+        private readonly Rigidbody2D _rigidbody2D;
+        private readonly SpriteRenderer _spriteRenderer;
+
         private int _direction;
         private bool _isInVision;
+        private bool _flipX;
 
         public EnemyMovementController(float chaseSpeed, Transform player, Transform enemy, Rigidbody2D rigidbody2D, AnimationManager animationManager, SpriteRenderer spriteRenderer, Collider2D collider2D, float moveSpeed, float jumpForce) : base(rigidbody2D)
         {
@@ -31,52 +32,50 @@ namespace Enemies
             _collider2D = collider2D;
             _moveSpeed = moveSpeed;
             _jumpForce = jumpForce;
-            
+
+            _flipX = _spriteRenderer.flipX;
             _colliderDefault = new Vector2(collider2D.offset.x, collider2D.offset.y);
             _colliderFlip = new Vector2(collider2D.offset.x * -1, collider2D.offset.y);
-            
+
             FlipToPlayer();
         }
 
         public void Walk(int direction, bool isInvulnerable)
         {
             if (isInvulnerable) return;
-            
+
             var currentSpeed = _isInVision ? _chaseSpeed : _moveSpeed;
-            
+
             SetDirection(direction);
-            _rigidbody2D.linearVelocity = new Vector2(direction * currentSpeed, _rigidbody2D.linearVelocity.y);
+            _rigidbody2D.velocity = new Vector2(direction * currentSpeed, _rigidbody2D.velocity.y);
             _animationManager.Move();
         }
 
         public void StopWalk()
         {
-            if (!_animationManager.GetBoolAnimator(Library.IsFalling))
-            {
-                _rigidbody2D.linearVelocity = new Vector2(0, 0);
-            }
-    
+            if (!_animationManager.GetBoolAnimator(Library.IsFalling)) _rigidbody2D.velocity = new Vector2(0, 0);
+
             _animationManager.StopMove();
         }
 
         public void Jump()
         {
-            _rigidbody2D.linearVelocity = new Vector2(_rigidbody2D.linearVelocity.x, _jumpForce);
+            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpForce);
         }
-        
+
         public void FlipDirection()
         {
             SetDirection(_direction *= -1);
 
             // 🔥 Impede que ele ande imediatamente após virar
-            _rigidbody2D.linearVelocity = Vector2.zero; // Para o movimento
+            _rigidbody2D.velocity = Vector2.zero; // Para o movimento
         }
 
         public void FlipToPlayer()
         {
             SetDirection(_player.transform.position.x < _enemy.position.x ? -1 : 1);
         }
-        
+
         private void SetDirection(int direction)
         {
             _direction = direction;
@@ -87,11 +86,12 @@ namespace Enemies
         {
             return _direction;
         }
-        
+
         private void UpdateSpriteDirection()
         {
-            _spriteRenderer.flipX = _direction == 1;
-            _collider2D.offset = _spriteRenderer.flipX ? _colliderDefault : _colliderFlip;
+            _flipX = _direction == 1;
+            _spriteRenderer.flipX = _flipX;
+            _collider2D.offset = _flipX ? _colliderDefault : _colliderFlip;
         }
 
         public void UpdateChasingStatus(float visionDistance)

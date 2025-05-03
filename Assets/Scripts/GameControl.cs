@@ -5,18 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class GameControl : MonoBehaviour
 {
-    private int _score;
-    private string _levelName;
-    private float timeLevel;
-    private bool _inLevel;
-    
     private static GameControl _instance;
+    private bool _inLevel;
+    private string _levelName;
+    private int _score;
+    private float _timeLevel;
+
     public static GameControl StaticGameControl
     {
         get
         {
             if (_instance) return _instance;
-            
+
             var gameObject = new GameObject("GameControl");
             DontDestroyOnLoad(gameObject);
             _instance = gameObject.AddComponent<GameControl>();
@@ -29,10 +29,10 @@ public class GameControl : MonoBehaviour
     {
         if (_inLevel)
         {
-            if (timeLevel > 0)
+            if (_timeLevel > 0)
             {
-                timeLevel -= Time.deltaTime;
-                HudControl.StaticHudControl.UpdateTimeText(timeLevel);
+                _timeLevel -= Time.deltaTime;
+                HudControl.StaticHudControl.UpdateTimeText(_timeLevel);
             }
             else
             {
@@ -45,10 +45,10 @@ public class GameControl : MonoBehaviour
     {
         _levelName = levelName;
     }
-    
+
     public void SetLevelTime(float time)
     {
-        timeLevel = time;
+        _timeLevel = time;
     }
 
     public void SetInLevel(bool inLevel)
@@ -62,18 +62,15 @@ public class GameControl : MonoBehaviour
         _score += score;
         HudControl.StaticHudControl.UpdateScoreText(_score);
     }
-    
+
     public void RemoveScore(int score)
     {
         StartCoroutine(HudControl.StaticHudControl.ShowNewScore("- " + score));
-            
+
         _score -= score;
 
-        if (_score < 0)
-        {
-            _score = 0;
-        }
-            
+        if (_score < 0) _score = 0;
+
         HudControl.StaticHudControl.UpdateScoreText(_score);
     }
 
@@ -84,21 +81,20 @@ public class GameControl : MonoBehaviour
 
     private void ReopenLevel()
     {
-        StopAllCoroutines();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private static void SaveScore(int score, string levelName)
     {
         if (LoadScore(levelName) >= score) return;
-        
+
         PlayerPrefs.SetInt(Library.PlayerPrefsSavedScore + "_" + levelName, score);
         PlayerPrefs.Save();
     }
 
     private static int LoadScore(string levelName)
     {
-        var scoreName = Library.PlayerPrefsSavedScore + "_" + levelName;       
+        var scoreName = Library.PlayerPrefsSavedScore + "_" + levelName;
         return PlayerPrefs.HasKey(scoreName) ? PlayerPrefs.GetInt(scoreName, 0) : 0;
     }
 
@@ -110,7 +106,9 @@ public class GameControl : MonoBehaviour
 
     public static int LoadRespawnPoint()
     {
-        return PlayerPrefs.HasKey(Library.PlayerPrefsRespawnPoint) ? PlayerPrefs.GetInt(Library.PlayerPrefsRespawnPoint, 0) : 0;
+        return PlayerPrefs.HasKey(Library.PlayerPrefsRespawnPoint)
+            ? PlayerPrefs.GetInt(Library.PlayerPrefsRespawnPoint, 0)
+            : 0;
     }
 
     public static void CompleteLevel(int score, string levelName, bool isFinalLevel)
@@ -124,12 +122,13 @@ public class GameControl : MonoBehaviour
         StopAllCoroutines();
         SceneManager.LoadScene(Library.Menu);
     }
-    
+
     public void GameOver()
     {
+        StopAllCoroutines();
         StartCoroutine(GameOverRoutine());
     }
-    
+
     private IEnumerator GameOverRoutine()
     {
         yield return StartCoroutine(HudControl.StaticHudControl.MessageGameOver());

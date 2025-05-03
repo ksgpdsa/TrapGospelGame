@@ -21,10 +21,10 @@ namespace Scene
         public void SetNextScene(string sceneName)
         {
             _nextSceneName = sceneName;
-            
+
             EndScene();
         }
-        
+
         public void PreviousScene()
         {
             PreviousScene(PreviousSceneName);

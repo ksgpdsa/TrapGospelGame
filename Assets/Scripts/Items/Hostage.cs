@@ -6,24 +6,19 @@ namespace Items
     public class Hostage : MonoBehaviour
     {
         [SerializeField] private string nextScene;
-        
-        private GameObject mainCamera;
-        private LevelScene levelScene;
-        
+
+        private LevelScene _levelScene;
+
         private void Start()
         {
-            mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-            levelScene = mainCamera.GetComponent<LevelScene>();
-                
-            levelScene.SetNextScene(nextScene);
+            _levelScene = FindObjectOfType<LevelScene>();
+
+            _levelScene.SetNextScene(nextScene);
         }
-        
+
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.CompareTag("Player"))
-            {
-                levelScene.EndScene();
-            }
+            if (other.CompareTag("Player")) _levelScene.EndScene();
         }
     }
 }

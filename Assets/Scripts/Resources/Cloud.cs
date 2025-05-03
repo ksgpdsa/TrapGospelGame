@@ -7,5 +7,4 @@ namespace Resources
             HorizontalDirection = false;
         }
     }
-
 }

@@ -7,7 +7,7 @@ namespace Character
         public void Choice()
         {
             var characterManager = FindObjectOfType<CharacterManager>();
-            
+
             characterManager.ChoiceCharacter();
         }
     }

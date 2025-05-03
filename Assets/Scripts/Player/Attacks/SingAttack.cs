@@ -8,26 +8,30 @@ namespace Player.Attacks
         private SpriteRenderer _spriteAttack;
         private SpriteRenderer _spritePlayer;
 
+        private bool _flipX;
+
         private void Start()
         {
             _spritePlayer = Owner.GetComponent<SpriteRenderer>();
             _spriteAttack = GetComponent<SpriteRenderer>();
             _rigidBodyAttack = GetComponent<Rigidbody2D>();
-            
-            _spriteAttack.flipX = _spritePlayer.flipX;
+
+            _flipX = _spritePlayer.flipX;
+            _spriteAttack.flipX = _flipX;
             AttackTrajectory();
         }
-        
+
         public override void FlipMovement()
         {
-            _spriteAttack.flipX = !_spriteAttack.flipX;
+            _flipX = !_flipX;
+            _spriteAttack.flipX = _flipX;
             AttackTrajectory();
         }
 
         private void AttackTrajectory()
         {
-            var direction = !_spriteAttack.flipX ? Vector3.right : Vector3.left;
-            _rigidBodyAttack.linearVelocity = direction * AttackVelocity;
+            var direction = _flipX ? Vector3.left : Vector3.right;
+            _rigidBodyAttack.velocity = direction * AttackVelocity;
         }
     }
 }

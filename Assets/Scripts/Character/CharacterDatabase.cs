@@ -7,10 +7,7 @@ namespace Character
     {
         public Character[] characters;
 
-        public int CharacterCount
-        {
-            get { return characters.Length; }
-        }
+        public int CharacterCount => characters.Length;
 
         public Character GetCharacter(int index)
         {

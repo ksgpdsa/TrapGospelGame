@@ -6,32 +6,25 @@ namespace Enemies
 {
     public class EnemyAttackHandler
     {
-        private readonly float _attackFrequency;
         private readonly AnimationManager _animationManager;
+        private readonly float _attackFrequency;
         private float _attackTimer = 1;
 
         public EnemyAttackHandler(float attackFrequency, AnimationManager animationManager)
         {
             _attackFrequency = attackFrequency;
             _animationManager = animationManager;
-        }
-
-        // ReSharper disable Unity.PerformanceAnalysis
-        public void ManageAttacks(bool isInVision, Action attackCallback, bool instantiateAttackByAnimation, bool attackNow = true)
+        } // ReSharper disable Unity.PerformanceAnalysis
+        public void ManageAttacks(bool isInVision, Action attackCallback, bool instantiateAttackByAnimation,
+            bool attackNow = true)
         {
             if (attackNow && isInVision && _attackTimer <= 0)
             {
-                if (!instantiateAttackByAnimation)
-                {
-                    attackCallback?.Invoke();
-                }
-                
+                if (!instantiateAttackByAnimation) attackCallback?.Invoke();
+
                 Attack();
 
-                if (!instantiateAttackByAnimation)
-                {
-                    EndAttack();
-                }
+                if (!instantiateAttackByAnimation) EndAttack();
             }
             else if (_attackTimer > 0)
             {

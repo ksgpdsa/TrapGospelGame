@@ -4,7 +4,7 @@ using Resources;
 using Respawn;
 using UI;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 namespace Player
 {
@@ -25,33 +25,33 @@ namespace Player
         [SerializeField] private Image imageAttackBar;
         [SerializeField] private Image imageJumpBar;
         
-        private PlayerMovement _playerMovement;
-        private PlayerHealth _playerHealth;
-        private AnimationManager _animationManager;
-        private PlayerEnvironmentChecker _playerEnvironmentChecker;
-        private SpriteRenderer _spriteRenderer;
-        private AwardManager _awardManager;
-        private Rigidbody2D _rigidbody2D;
-        private bool _jump;
-        private bool _jumpUI;
-        private float _horizontal;
-        private float _horizontalUI;
-        private float _vertical;
-        private float _verticalUI;
         private bool _attack;
         private bool _attackUI;
-        private float _timerToNextAttack;
+        private bool _blockJump;
+        private bool _canJump;
+        private bool _isDelayTouchGround;
+        private bool _isGrounded;
         private bool _isInvulnerable;
         private bool _isKnockBack;
+        private bool _jump;
+        private bool _jumpUI;
+        
         private float _countJump;
-        private bool _isGrounded;
-        private bool _isDelayTouchGround;
-        private bool _canJump;
-        private bool _blockJump;
+        private float _horizontal;
+        private float _horizontalUI;
+        private float _timerToNextAttack;
+        private float _vertical;
+        private float _verticalUI;
+        
+        private AnimationManager _animationManager;
+        private AwardManager _awardManager;
+        private PlayerEnvironmentChecker _playerEnvironmentChecker;
+        private PlayerHealth _playerHealth;
+        private PlayerMovement _playerMovement;
+        private Rigidbody2D _rigidbody2D;
+        private SpriteRenderer _spriteRenderer;
 
         protected Dictionary<int, string> Awards;
-
-        public abstract void AttackFromPlayer();
 
         protected void Awake()
         {
@@ -82,18 +82,26 @@ namespace Player
         {
             SetIsGrounded(_playerEnvironmentChecker.CheckIsGrounded());
             SetIsDelayTouchGround(_playerEnvironmentChecker.CheckIsDelayTouchGround());
-            
+
             ManageMovement();
 
             ManageAttack();
 
             ManageJump();
         }
-        
+
+        private void OnDrawGizmosSelected()
+        {
+            _playerEnvironmentChecker.OnDrawGizmosSelected();
+        }
+
+        public abstract void AttackFromPlayer();
+
         private void ManagePlayerLivesOnAwake()
         {
             lives = PlayerPrefs.GetInt("PlayerLives", 0) > 0 ? PlayerPrefs.GetInt("PlayerLives", 0) : lives;
-            lives = lives <= 5 ? lives : lives <= 0 ? 1 : 5; // para garantir que não vai ter mais que 5 e nem nascer morto
+            lives = lives <= 5 ? lives :
+                lives <= 0 ? 1 : 5; // para garantir que não vai ter mais que 5 e nem nascer morto
         }
 
         private void ManageRespawnStart()
@@ -101,7 +109,7 @@ namespace Player
             var respawn = gameObject.GetComponent<PlayerRespawn>();
             respawn.Respawn();
         }
-        
+
         private void ManageInputs()
         {
             _jump = _jumpUI ? _jumpUI : Input.GetButton("Jump");
@@ -122,16 +130,13 @@ namespace Player
             {
                 if (!_isKnockBack)
                 {
-                    if (_isGrounded && !_jump)
-                    {
-                        _playerMovement.DontMove();
-                    }
+                    if (_isGrounded && !_jump) _playerMovement.DontMove();
                 }
                 else
                 {
                     _isKnockBack = false;
                 }
-                
+
                 _animationManager.StopMove();
             }
         }
@@ -139,37 +144,28 @@ namespace Player
         private void ManageJump()
         {
             ManageJumpActions();
-            
-            _animationManager.ManageJumpAnimations(_isGrounded, _rigidbody2D.linearVelocity.y);
+
+            _animationManager.ManageJumpAnimations(_isGrounded, _rigidbody2D.velocity.y);
         }
 
         private void ManageJumpActions()
         {
             if (_jump)
             {
-                if (_canJump)
-                {
-                    _playerMovement.Jump(jumpForce);
-                }
+                if (_canJump) _playerMovement.Jump(jumpForce);
             }
             else
             {
-                if (!_isGrounded)
-                {
-                    _playerMovement.EscJump();
-                }
+                if (!_isGrounded) _playerMovement.EscJump();
             }
-            
+
             var percent = CalculatePercentToNextJump();
             HudControl.StaticHudControl.UpdateImageSize(percent, imageJumpBar);
         }
 
         private void ManageAttack()
         {
-            if (_attack)
-            {
-                _timerToNextAttack = _playerMovement.Attack();
-            }
+            if (_attack) _timerToNextAttack = _playerMovement.Attack();
 
             ManageAttackTimer();
         }
@@ -179,13 +175,8 @@ namespace Player
             if (_timerToNextAttack != 0)
             {
                 if (_timerToNextAttack > 0)
-                {
                     _timerToNextAttack -= howTimeToNextAttack * Time.fixedDeltaTime;
-                }
-                else if(_timerToNextAttack < 0 )
-                {
-                    _timerToNextAttack = 0;
-                }
+                else if (_timerToNextAttack < 0) _timerToNextAttack = 0;
 
                 var calculatePercent = CalculatePercentToNextAttack();
 
@@ -201,29 +192,22 @@ namespace Player
                 return 0;
             }
 
-            if (_countJump > 100)
-            {
-                _countJump = 100;
-            }
+            if (_countJump > 100) _countJump = 100;
 
             _countJump += Time.deltaTime * 1000;
-            
+
             return _countJump;
         }
-        
+
         private float CalculatePercentToNextAttack()
         {
             _playerMovement.SetTimerToNextAttack(_timerToNextAttack);
-            
+
             var calculatePercent = 100 - _timerToNextAttack * 100;
 
             if (calculatePercent > 100)
-            {
                 calculatePercent = 100;
-            }else if (calculatePercent < 0)
-            {
-                calculatePercent = 0;
-            }
+            else if (calculatePercent < 0) calculatePercent = 0;
 
             return calculatePercent;
         }
@@ -233,18 +217,17 @@ namespace Player
             if (!_isInvulnerable)
             {
                 var newLives = _playerHealth.TakeDamage(damage);
-                
+
                 _playerMovement.KnockBack(knockBackForce, direction, jumpByKnockBack);
                 _isKnockBack = true;
                 
-                HudControl.StaticHudControl.SetPlayerLivesInHud(newLives);
-
                 if (newLives > 0)
                 {
+                    HudControl.StaticHudControl.SetPlayerLivesInHud(newLives);
                     StartCoroutine(Damage());
                 }
                 else
-                {
+                {   
                     _playerHealth.GameOver();
                 }
             }
@@ -264,7 +247,7 @@ namespace Player
                 _spriteRenderer.enabled = true;
                 yield return new WaitForSeconds(0.15f);
             }
-            
+
             _isInvulnerable = false;
         }
 
@@ -272,7 +255,7 @@ namespace Player
         {
             return _isInvulnerable;
         }
-        
+
         private void SetIsGrounded(bool value)
         {
             _isGrounded = value;
@@ -295,7 +278,7 @@ namespace Player
         {
             _canJump = (_isGrounded || _isDelayTouchGround) && !_blockJump;
         }
-        
+
         public void GameOver()
         {
             _playerHealth.GameOver();
@@ -309,7 +292,7 @@ namespace Player
         public void MoveRightExit()
         {
             _horizontalUI = 0;
-        } 
+        }
 
         public void MoveLeft()
         {
@@ -345,11 +328,5 @@ namespace Player
         {
             _awardManager.SetRandomAward();
         }
-
-        private void OnDrawGizmosSelected()
-        {
-            _playerEnvironmentChecker.OnDrawGizmosSelected();
-        }
-
     }
 }

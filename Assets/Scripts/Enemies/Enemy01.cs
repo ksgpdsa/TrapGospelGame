@@ -12,17 +12,19 @@ namespace Enemies
         protected override bool HasFixedMode => true;
         protected override bool HasGoToPointsMode => false;
 
-        protected override void InstantiateAttack()
-        {
-            var newArrow = Instantiate(attack, new Vector3(transform.position.x - 0.1f, transform.position.y - 0.1f, transform.position.z), Quaternion.identity);
-            var script = newArrow.GetComponent<Arrow>();
-            
-            script.Initialize(gameObject, attackVelocity, takeDamage);
-        }
-
         private void Update()
         {
             AttackHandler.ManageAttacks(IsInVision, InstantiateAttack, InstantiateAttackByAnimation);
+        }
+
+        protected override void InstantiateAttack()
+        {
+            var newArrow = Instantiate(attack,
+                new Vector3(transform.position.x - 0.1f, transform.position.y - 0.1f, transform.position.z),
+                Quaternion.identity);
+            var script = newArrow.GetComponent<Arrow>();
+
+            script.Initialize(gameObject, attackVelocity, takeDamage);
         }
     }
 }

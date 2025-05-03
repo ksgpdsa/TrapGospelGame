@@ -9,8 +9,8 @@ namespace Player
         [SerializeField] private Text valor;
         [SerializeField] private GameObject buttonPurchase;
         [SerializeField] private GameObject buttonChoiceCharacter;
-        
-        private bool unlocked;
+
+        private bool _unlocked;
 
         private void Awake()
         {
@@ -24,9 +24,9 @@ namespace Player
 
         private void ManageUnlock()
         {
-            unlocked = PlayerPrefs.GetInt(Library.PlayerPrefsPurchasedCharacter + characterName, 0) == 1;
+            _unlocked = PlayerPrefs.GetInt(Library.PlayerPrefsPurchasedCharacter + characterName, 0) == 1;
 
-            if (unlocked)
+            if (_unlocked)
             {
                 buttonChoiceCharacter.SetActive(true);
                 buttonPurchase.SetActive(false);

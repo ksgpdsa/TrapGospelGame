@@ -1,1 +1,131 @@
-{"appleSKU":"","appleTeamID":"","enableCodelessAutoInitialization":true,"products":[{"id":"charactert3rt","type":1,"storeIDs":[{"store":"AppleAppStore","id":"com.MaisUmQueDeusGuia.TrapGospelGame.ios.charactert3rt"},{"store":"GooglePlay","id":"com.MaisUmQueDeusGuia.TrapGospelGame.googleplay.charactert3rt"},{"store":"SamsungApps","id":"com.MaisUmQueDeusGuia.TrapGospelGame.samsung.charactert3rt"},{"store":"AmazonApps","id":"com.MaisUmQueDeusGuia.TrapGospelGame.amazon.charactert3rt"},{"store":"MacAppStore","id":"com.MaisUmQueDeusGuia.TrapGospelGame.macos.charactert3rt"},{"store":"WinRT","id":"com.MaisUmQueDeusGuia.TrapGospelGame.windows.charactert3rt"},{"store":"UDP","id":"com.MaisUmQueDeusGuia.TrapGospelGame.udp.charactert3rt"}],"defaultDescription":{"googleLocale":4,"title":"T3rt","description":"Character T3rt"},"screenshotPath":"","applePriceTier":1,"googlePrice":{"data":[99,0,0,131072],"num":0.99},"pricingTemplateID":"TIER1","descriptions":[],"udpPrice":{"data":[0,0,0,0],"num":0.0},"payouts":[]},{"id":"characterrenanbatista","type":1,"storeIDs":[{"store":"AppleAppStore","id":"com.MaisUmQueDeusGuia.TrapGospelGame.ios.characterrenanbatista"},{"store":"GooglePlay","id":"com.MaisUmQueDeusGuia.TrapGospelGame.googleplay.characterrenanbatista"},{"store":"SamsungApps","id":"com.MaisUmQueDeusGuia.TrapGospelGame.samsung.characterrenanbatista"},{"store":"AmazonApps","id":"com.MaisUmQueDeusGuia.TrapGospelGame.amazon.characterrenanbatista"},{"store":"MacAppStore","id":"com.MaisUmQueDeusGuia.TrapGospelGame.macos.characterrenanbatista"},{"store":"WinRT","id":"com.MaisUmQueDeusGuia.TrapGospelGame.windows.characterrenanbatista"},{"store":"UDP","id":"com.MaisUmQueDeusGuia.TrapGospelGame.udp.characterrenanbatista"}],"defaultDescription":{"googleLocale":4,"title":"Renan Batista","description":"Character Renan Batista"},"screenshotPath":"","applePriceTier":1,"googlePrice":{"data":[99,0,0,131072],"num":0.99},"pricingTemplateID":"TIER1","descriptions":[],"udpPrice":{"data":[0,0,0,0],"num":0.0},"payouts":[]}]}
+{
+  "appleSKU": "",
+  "appleTeamID": "",
+  "enableCodelessAutoInitialization": true,
+  "products": [
+    {
+      "id": "charactert3rt",
+      "type": 1,
+      "storeIDs": [
+        {
+          "store": "AppleAppStore",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.ios.charactert3rt"
+        },
+        {
+          "store": "GooglePlay",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.googleplay.charactert3rt"
+        },
+        {
+          "store": "SamsungApps",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.samsung.charactert3rt"
+        },
+        {
+          "store": "AmazonApps",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.amazon.charactert3rt"
+        },
+        {
+          "store": "MacAppStore",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.macos.charactert3rt"
+        },
+        {
+          "store": "WinRT",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.windows.charactert3rt"
+        },
+        {
+          "store": "UDP",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.udp.charactert3rt"
+        }
+      ],
+      "defaultDescription": {
+        "googleLocale": 4,
+        "title": "T3rt",
+        "description": "Character T3rt"
+      },
+      "screenshotPath": "",
+      "applePriceTier": 1,
+      "googlePrice": {
+        "data": [
+          99,
+          0,
+          0,
+          131072
+        ],
+        "num": 0.99
+      },
+      "pricingTemplateID": "TIER1",
+      "descriptions": [],
+      "udpPrice": {
+        "data": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "num": 0.0
+      },
+      "payouts": []
+    },
+    {
+      "id": "characterrenanbatista",
+      "type": 1,
+      "storeIDs": [
+        {
+          "store": "AppleAppStore",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.ios.characterrenanbatista"
+        },
+        {
+          "store": "GooglePlay",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.googleplay.characterrenanbatista"
+        },
+        {
+          "store": "SamsungApps",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.samsung.characterrenanbatista"
+        },
+        {
+          "store": "AmazonApps",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.amazon.characterrenanbatista"
+        },
+        {
+          "store": "MacAppStore",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.macos.characterrenanbatista"
+        },
+        {
+          "store": "WinRT",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.windows.characterrenanbatista"
+        },
+        {
+          "store": "UDP",
+          "id": "com.MaisUmQueDeusGuia.TrapGospelGame.udp.characterrenanbatista"
+        }
+      ],
+      "defaultDescription": {
+        "googleLocale": 4,
+        "title": "Renan Batista",
+        "description": "Character Renan Batista"
+      },
+      "screenshotPath": "",
+      "applePriceTier": 1,
+      "googlePrice": {
+        "data": [
+          99,
+          0,
+          0,
+          131072
+        ],
+        "num": 0.99
+      },
+      "pricingTemplateID": "TIER1",
+      "descriptions": [],
+      "udpPrice": {
+        "data": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "num": 0.0
+      },
+      "payouts": []
+    }
+  ]
+}

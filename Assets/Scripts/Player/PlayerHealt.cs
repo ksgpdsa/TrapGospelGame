@@ -18,9 +18,9 @@ namespace Player
             var newLive = _lives - damage;
 
             SetPlayerLives(newLive);
-            
+
             GameControl.StaticGameControl.RemoveScore(_scoreOnDamage);
-            
+
             return newLive;
         }
 

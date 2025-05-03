@@ -1,4 +1,3 @@
-using System.Collections;
 using Player.Attacks;
 using UI;
 using UnityEngine;
@@ -14,11 +13,12 @@ namespace Enemies
         protected override bool HasPatrolMode => false;
         protected override bool HasFixedMode => false;
         protected override bool HasGoToPointsMode => true;
-        
+
         protected override void InstantiateAttack()
         {
-            var attackPosition = new Vector3(transform.position.x + 0.5f, transform.position.y - 0.1f, transform.position.z);
-            
+            var attackPosition = new Vector3(transform.position.x + 0.5f, transform.position.y - 0.1f,
+                transform.position.z);
+
             var newAttack = Instantiate(attack, attackPosition, Quaternion.identity);
             var script = newAttack.GetComponent<Attack>();
 
@@ -28,7 +28,7 @@ namespace Enemies
         protected override void Defeated(float knockBackForce)
         {
             // StartCoroutine(WaitKnockBack(knockBackForce)));
-            StartCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite,nextScene));
+            StartCoroutine(HudControl.StaticHudControl.DefeatScene(ThisSprite, nextScene));
         }
     }
 }

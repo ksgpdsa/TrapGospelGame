@@ -5,9 +5,9 @@ namespace Camera
     public class CameraFollow : MonoBehaviour
     {
         [SerializeField] private float smoothSpeed;
-        
+
         private Transform _target;
-        
+
         // Start is called before the first frame update
         private void Start()
         {

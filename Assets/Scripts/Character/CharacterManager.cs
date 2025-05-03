@@ -6,13 +6,13 @@ namespace Character
     public class CharacterManager : MonoBehaviour
     {
         [SerializeField] private CharacterDatabase characterDatabase;
-        
+
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private GameObject characterPrefab;
         [SerializeField] private UnityEngine.Camera cameraScene;
-        
-        private int selectedCharacter;
-        
+
+        private int _selectedCharacter;
+
         private void Start()
         {
             UpdateCharacter();
@@ -20,41 +20,32 @@ namespace Character
 
         public void NextCharacter()
         {
-            selectedCharacter++;
+            _selectedCharacter++;
 
-            if (selectedCharacter >= characterDatabase.CharacterCount)
-            {
-                selectedCharacter = 0;
-            }
-            
+            if (_selectedCharacter >= characterDatabase.CharacterCount) _selectedCharacter = 0;
+
             UpdateCharacter();
         }
 
         public void PreviousCharacter()
         {
-            selectedCharacter--;
+            _selectedCharacter--;
 
-            if (selectedCharacter < 0)
-            {
-                selectedCharacter = characterDatabase.CharacterCount - 1;
-            }
-            
+            if (_selectedCharacter < 0) _selectedCharacter = characterDatabase.CharacterCount - 1;
+
             UpdateCharacter();
         }
 
         private void UpdateCharacter()
         {
             var characterPosition = characterPrefab.transform.position;
-            
+
             // Destroi o personagem anterior (se houver)
-            if (characterPrefab != null)
-            {
-                Destroy(characterPrefab);
-            }
+            if (characterPrefab != null) Destroy(characterPrefab);
 
             // Obtém o novo personagem do banco de dados
-            var character = characterDatabase.GetCharacter(selectedCharacter);
-    
+            var character = characterDatabase.GetCharacter(_selectedCharacter);
+
             // Instancia o novo personagem na cena
             characterPrefab = Instantiate(character.gameObject, characterPosition, Quaternion.identity);
 
@@ -64,10 +55,10 @@ namespace Character
 
         public void ChoiceCharacter()
         {
-            PlayerPrefs.SetInt(Library.PlayerPrefsSelectedCharacter, selectedCharacter);
+            PlayerPrefs.SetInt(Library.PlayerPrefsSelectedCharacter, _selectedCharacter);
 
             var scene = cameraScene.GetComponent<Scene.Scene>();
-            
+
             scene.EndScene();
         }
     }

@@ -1,17 +1,17 @@
+using UnityEngine;
+
 namespace Resources
 {
-    using UnityEngine;
-
     public class FloatingScore : MonoBehaviour
     {
         [SerializeField] private Transform player;
         [SerializeField] private Vector3 offset;
 
-        private Camera _mainCamera;
+        private UnityEngine.Camera _mainCamera;
 
         private void Start()
         {
-            _mainCamera = Camera.main;
+            _mainCamera = UnityEngine.Camera.main;
         }
 
         private void Update()
@@ -24,5 +24,4 @@ namespace Resources
             }
         }
     }
-
 }

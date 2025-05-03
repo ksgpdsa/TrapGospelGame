@@ -5,12 +5,13 @@ namespace Player
 {
     public class PlayerMovement : Movement
     {
-        private readonly Rigidbody2D _rigidbody2D;
         private readonly AnimationManager _animationManager;
-        private readonly SpriteRenderer _spriteRenderer;
-        private readonly Player _player;
         private readonly float _escJumpSpeed;
-        
+        private readonly Player _player;
+        private readonly Rigidbody2D _rigidbody2D;
+        private readonly SpriteRenderer _spriteRenderer;
+
+        private bool _flipX;
         private float _timerToNextAttack;
 
         public PlayerMovement(Player player, float escJumpSpeed, AnimationManager animationManager, Rigidbody2D rigidbody2D, SpriteRenderer spriteRenderer) : base(rigidbody2D)
@@ -21,9 +22,10 @@ namespace Player
             _spriteRenderer = spriteRenderer;
             _escJumpSpeed = escJumpSpeed;
 
-            _rigidbody2D.linearVelocity = Vector2.zero;
+            _flipX = _spriteRenderer.flipX;
+            _rigidbody2D.velocity = Vector2.zero;
         }
-        
+
         public void Jump(float jumpForce)
         {
             Move(0, jumpForce);
@@ -31,22 +33,23 @@ namespace Player
 
         public void EscJump()
         {
-            if (_rigidbody2D.linearVelocity.y > 0.5)
+            if (_rigidbody2D.velocity.y > 0.5)
             {
-                _rigidbody2D.linearVelocity = new Vector2(_rigidbody2D.linearVelocity.x, _rigidbody2D.linearVelocity.y * _escJumpSpeed);
+                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _rigidbody2D.velocity.y * _escJumpSpeed);
             }
         }
 
         public void Move(float horizontal, float vertical)
         {
-            _spriteRenderer.flipX = horizontal == 0 ? _spriteRenderer.flipX : horizontal < 0;
+            _flipX = horizontal == 0 ? _flipX : horizontal < 0;
+            _spriteRenderer.flipX = _flipX;
 
-            horizontal = horizontal == 0 ? _rigidbody2D.linearVelocity.x : horizontal;
-            vertical = vertical == 0 ? _rigidbody2D.linearVelocity.y : vertical;
-            
-            _rigidbody2D.linearVelocity = new Vector2(horizontal, vertical);
+            horizontal = horizontal == 0 ? _rigidbody2D.velocity.x : horizontal;
+            vertical = vertical == 0 ? _rigidbody2D.velocity.y : vertical;
+
+            _rigidbody2D.velocity = new Vector2(horizontal, vertical);
         }
-        
+
         public float Attack()
         {
             if (_timerToNextAttack == 0)
@@ -70,10 +73,7 @@ namespace Player
 
         public void DontMove()
         {
-            if (!_animationManager.GetBoolAnimator(Library.IsFalling))
-            {
-                _rigidbody2D.linearVelocity = new Vector2(0, 0);
-            }
+            if (!_animationManager.GetBoolAnimator(Library.IsFalling)) _rigidbody2D.velocity = new Vector2(0, 0);
         }
     }
 }

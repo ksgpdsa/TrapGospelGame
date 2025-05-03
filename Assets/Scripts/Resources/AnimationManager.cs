@@ -10,7 +10,7 @@ namespace Resources
         {
             _animator = animator;
         }
-    
+
         public void ManageJumpAnimations(bool isGrounded, float velocityY)
         {
             SetBoolAnimator(Library.IsJumping, !isGrounded && velocityY > 0);

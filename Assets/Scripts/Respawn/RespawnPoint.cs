@@ -1,3 +1,4 @@
+using Extensions;
 using UnityEngine;
 
 namespace Respawn
@@ -7,18 +8,18 @@ namespace Respawn
         [SerializeField] private int respawnNumber;
         [SerializeField] private Sprite activeRespawnPoint;
 
-        public int GetRespawnNumber()
-        {
-            return respawnNumber;
-        }
-        
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Player"))
             {
-                var spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-                spriteRenderer.sprite = activeRespawnPoint;
+                var childrenSpriteRenderer = gameObject.GetComponentOnlyInChildren<SpriteRenderer>();
+                childrenSpriteRenderer.enabled = true;
             }
+        }
+
+        public int GetRespawnNumber()
+        {
+            return respawnNumber;
         }
     }
 }

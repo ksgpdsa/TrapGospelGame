@@ -3,104 +3,115 @@
 // - No Glow Option
 // - Softness is applied on both side of the outline
 
-Shader "TextMeshPro/Mobile/Distance Field SSD" {
+Shader "TextMeshPro/Mobile/Distance Field SSD"
+{
 
-Properties {
-	_FaceColor		    ("Face Color", Color) = (1,1,1,1)
-	_FaceDilate			("Face Dilate", Range(-1,1)) = 0
+    Properties
+    {
+        [HDR]_Face 	("Face Color", Color) = (1,1,1,1)        	_FaceDilat 	("Face Dilate", Range(-1,1)) = 0
+        	[HDR]_Outlin r	("Outline Color", Color) = (0,0,0,1        
+	_OutlineWid 		("Outline Thickness", Range(0,1)) =         
+	_OutlineSoftne s	("Outline Softness", Range(0,1)) = 0        
+	[HDR]_Underl Color		("Border Color", Color) = (0,0        0,.5)
+	_Underlay fsetX 	("Border OffsetX", Range(-1,1        ) = 0
+	_Underlay fsetY 	("Border OffsetY", Range(-1,1        ) = 0
+	_Underla ilate		("Border Dilate", Range(-1,1        ) = 0
+	_UnderlayS tness 	("Border Softness", Range(0,1)         = 0
 
-	_OutlineColor	    ("Outline Color", Color) = (0,0,0,1)
-	_OutlineWidth		("Outline Thickness", Range(0,1)) = 0
-	_OutlineSoftness	("Outline Softness", Range(0,1)) = 0
+	_Weigh ormal		("Weight Normal", floa        ) = 0
+	_Wei Bold			("Weight Bold", float)        = .5
 
-	_UnderlayColor		("Border Color", Color) = (0,0,0,.5)
-	_UnderlayOffsetX 	("Border OffsetX", Range(-1,1)) = 0
-	_UnderlayOffsetY 	("Border OffsetY", Range(-1,1)) = 0
-	_UnderlayDilate		("Border Dilate", Range(-1,1)) = 0
-	_UnderlaySoftness 	("Border Softness", Range(0,1)) = 0
+	_Shad Flags		("Flags", floa        ) = 0
+	_Scal atioA		("Scale RatioA", floa        ) = 1
+	_Scal atioB		("Scale RatioB", floa        ) = 1
+	_Scal atioC		("Scale RatioC", float         = 1
 
-	_WeightNormal		("Weight Normal", float) = 0
-	_WeightBold			("Weight Bold", float) = .5
+	_ nTex			("Font Atlas", 2D) = "whi        e" {}
+	_Textu Width		("Texture Width", float)        = 512
+	_Textur eight		("Texture Height", float)        = 512
+	_Gradie Scale		("Gradient Scale", floa        ) = 5
+	 leX				("Scale X", floa        ) = 1
+	 leY				("Scale Y", floa        ) = 1
+	_Perspectiv Filter	("Perspective Correction", Range(0, 1)) =        0.875
+	_Sh ness			("Sharpness", Range(-1,1)         = 0
 
-	_ShaderFlags		("Flags", float) = 0
-	_ScaleRatioA		("Scale RatioA", float) = 1
-	_ScaleRatioB		("Scale RatioB", float) = 1
-	_ScaleRatioC		("Scale RatioC", float) = 1
+	_Vertex fsetX		("Vertex OffsetX", floa        ) = 0
+	_Vertex fsetY		("Vertex OffsetY", float         = 0
 
-	_MainTex			("Font Atlas", 2D) = "white" {}
-	_TextureWidth		("Texture Width", float) = 512
-	_TextureHeight		("Texture Height", float) = 512
-	_GradientScale		("Gradient Scale", float) = 5
-	_ScaleX				("Scale X", float) = 1
-	_ScaleY				("Scale Y", float) = 1
-	_PerspectiveFilter	("Perspective Correction", Range(0, 1)) = 0.875
-	_Sharpness			("Sharpness", Range(-1,1)) = 0
+	_C Rect			("Clip Rect", vector) = (-32767, -32767, 32767,         2767)
+	_MaskSo nessX		("Mask SoftnessX", floa        ) = 0
+	_MaskSo nessY		("Mask SoftnessY", floa        ) = 0
+	_ kTex			("Mask Texture", 2D) = "whi        e" {}
+	_Mask verse		("Inverse", floa        ) = 0
+	_MaskEd Color		("Edge Color", Color) = (1,        ,1,1)
+	_MaskEdgeS ftness	("Edge Softness", Range(0, 1))          0.01
+	_MaskWipe ontrol	("Wipe Position", Range(0, 1))          0.5
 
-	_VertexOffsetX		("Vertex OffsetX", float) = 0
-	_VertexOffsetY		("Vertex OffsetY", float) = 0
+	_Sten lComp		("Stencil Comparison", Floa        ) = 8
+	_ ncil			("Stencil ID", Floa        ) = 0
+	_St ilOp			("Stencil Operation", Floa        ) = 0
+	_StencilWr teMask	("Stencil Write Mask", Float)        = 255
+	_StencilR adMask	("Stencil Read Mask", Float)         5
 
-	_ClipRect			("Clip Rect", vector) = (-32767, -32767, 32767, 32767)
-	_MaskSoftnessX		("Mask SoftnessX", float) = 0
-	_MaskSoftnessY		("Mask SoftnessY", float) = 0
-	_MaskTex			("Mask Texture", 2D) = "white" {}
-	_MaskInverse		("Inverse", float) = 0
-	_MaskEdgeColor		("Edge Color", Color) = (1,1,1,1)
-	_MaskEdgeSoftness	("Edge Softness", Range(0, 1)) = 0.01
-	_MaskWipeControl	("Wipe Position", Range(0, 1)) = 0.5
+    _C        ("Cull Mode", Floa        ) = 0
+	_Co Mask			("Color Mask", Floa
+    )
 
-	_StencilComp		("Stencil Comparison", Float) = 8
-	_Stencil			("Stencil ID", Float) = 0
-	_StencilOp			("Stencil Operation", Float) = 0
-	_StencilWriteMask	("Stencil Write Mask", Float) = 255
-	_StencilReadMask	("Stencil Read Mask", Float) = 255
-
-    _CullMode           ("Cull Mode", Float) = 0
-	_ColorMask			("Color Mask", Float) = 15
+     15
 }
 
-SubShader {
-	Tags {
-		"Queue"="Transparent"
-		"IgnoreProjector"="True"
-		"RenderType"="Transparent"
+Su
+    Sh        der 
+        
+	            gs {
+		"Queue"="Transp            ent"
+		"IgnoreProjector"=            rue"
+		"RenderType"="Transp        ren        "
 	}
 
-	Stencil
+	S        en            l
 	{
-		Ref [_Stencil]
-		Comp [_StencilComp]
-		Pass [_StencilOp]
-		ReadMask [_StencilReadMask]
-		WriteMask [_StencilWriteMask]
+		Ref [_St            cil]
+		Comp [_Stenci            omp]
+		Pass [_Sten            lOp]
+		ReadMask [_StencilRea            ask]
+		WriteMask [_StencilWrit        Mas        ]
 	}
 
-	Cull [_CullMode]
-	ZWrite Off
-	Lighting Off
-	Fog { Mode Off }
-	ZTest [unity_GUIZTestMode]
-	Blend One OneMinusSrcAlpha
-	ColorMask [_ColorMask]
+	Cull [_Cul        Mode]
+	ZWri        e Off
+	Lighti        g O
+        f
+            	Fog { M
+        de        Off }
+	ZTest [unity_GUIZTes        Mode]
+	Blend One OneMinusSr        Alpha
+	ColorMask [_Color        ask]
+        
+	            ss {
+		CG
+            #pragma vertex VertShader
+            #pragma fragment PixShader
+            #pragma shader_feature __ OUTLINE_ON
+            #pragma shader_feature __ UNDERLAY_ON UNDERLAY_INNER
 
-	Pass {
-		CGPROGRAM
-		#pragma vertex VertShader
-		#pragma fragment PixShader
-		#pragma shader_feature __ OUTLINE_ON
-		#pragma shader_feature __ UNDERLAY_ON UNDERLAY_INNER
+            #pragma multi_compile __ UNITY_UI_CLIP_RECT
+            #pragma multi_compile __ UNITY_UI_ALPHACLIP
 
-		#pragma multi_compile __ UNITY_UI_CLIP_RECT
-		#pragma multi_compile __ UNITY_UI_ALPHACLIP
+            #include "UnityCG.cginc"
+            #include "UnityUI.cginc"
+            #include "TMPro_Properties.cginc"
 
-		#include "UnityCG.cginc"
-		#include "UnityUI.cginc"
-		#include "TMPro_Properties.cginc"
+            #include "TMPro_Mobile.cginc"
+            nc"
 
-		#include "TMPro_Mobile.cginc"
+	        E
+    D
 
-		ENDCG
+    
 	}
 }
 
-CustomEditor "TMPro.EditorUtilities.TMP_SDFShaderGUI"
+CustomEditor "TMPro.EditorUtilities.TMP_SDFSha
+eGUI"
 }
